@@ -24,4 +24,5 @@ mix.styles([
     'resources/template/js/chart.min.js',
     'resources/template/js/pace.min.js',
     'resources/template/js/template.js'
-], 'public/js/template.js');
+], 'public/js/template.js')
+.js(['resources/js/app.js'],'public/js/app.js');
