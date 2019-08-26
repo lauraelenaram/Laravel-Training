@@ -1,8 +1,5 @@
 {
-<<<<<<< HEAD
     "/js/app.js": "/js/app.js",
-=======
->>>>>>> f87f159b22b8df8bcf91fd3b18731a1875dbbd42
     "/css/template.css": "/css/template.css",
     "/js/template.js": "/js/template.js"
 }
