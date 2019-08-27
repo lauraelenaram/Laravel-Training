@@ -158,8 +158,9 @@
         <span class="ml-auto">Desarrollado por <a href="http://www.incanatoit.com/">IncanatoIT</a></span>
     </footer>
 
-    <script src="js/template.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/template.js"></script>
+    
 </body>
 
 </html>
