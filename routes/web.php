@@ -15,8 +15,8 @@ Route::get('/', function () {
     return view('content/content');
 });
 
-Route::get('/categoria','CategoryController@index');
-Route::post('/categoria/registrar','CategoryController@store');
-Route::put('/categoria/actualizar','CategoryController@update');
-Route::put('/categoria/actualizar/desactivar','CategoryController@desactivate');
-Route::put('/categoria/actualizar/activar','CategoryController@activate');
+Route::get('/category','CategoryController@index');
+Route::post('/category/register','CategoryController@store');
+Route::put('/category/update','CategoryController@update');
+Route::put('/category/update/desactivate','CategoryController@desactivate');
+Route::put('/category/update/activate','CategoryController@activate');
