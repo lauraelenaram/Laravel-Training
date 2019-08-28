@@ -72,7 +72,7 @@
 
     <div class="app-body">
         
-
+        @include('template.sidebar')
         <!-- Contenido Principal -->
         @yield('content')
         <!-- /Fin del contenido principal -->
