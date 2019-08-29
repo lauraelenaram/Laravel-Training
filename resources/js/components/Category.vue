@@ -111,6 +111,7 @@
                                         <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripción">
                                     </div>
                                 </div>
+                                <div></div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -159,7 +160,9 @@
                 categoryArray: [],
                 modal: 0,
                 modalTitle: '',
-                actionType: 0
+                actionType: 0,
+                categoryError: 0,
+                showCategoryMsgError: []
             }
         },
         methods: {
@@ -174,7 +177,13 @@
             },
             registerCategory()
             {
+                if(this.validateCategory())
+                {
+                    return;
+                }
+
                 let me= this;
+
                 axios.post('/categories/register',
                 {
                     'name': this.name,
@@ -187,6 +196,14 @@
                 {
                     console.log(error)
                 });
+            },
+            validateCategory()
+            {
+                this.categoryError=0;
+                this.showCategoryMsgError=[];
+                if(!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
+                if(this.showCategoryMsgError) this.categoryError=1;
+                return this.categoryError;
             },
             closeModal()
             {

@@ -1857,7 +1857,9 @@ __webpack_require__.r(__webpack_exports__);
       categoryArray: [],
       modal: 0,
       modalTitle: '',
-      actionType: 0
+      actionType: 0,
+      categoryError: 0,
+      showCategoryMsgError: []
     };
   },
   methods: {
@@ -1870,6 +1872,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     registerCategory: function registerCategory() {
+      if (this.validateCategory()) {
+        return;
+      }
+
       var me = this;
       axios.post('/categories/register', {
         'name': this.name,
@@ -1880,6 +1886,13 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error);
       });
+    },
+    validateCategory: function validateCategory() {
+      this.categoryError = 0;
+      this.showCategoryMsgError = [];
+      if (!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
+      if (this.showCategoryMsgError) this.categoryError = 1;
+      return this.categoryError;
     },
     closeModal: function closeModal() {
       this.modal = 0;
