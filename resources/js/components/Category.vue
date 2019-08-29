@@ -102,7 +102,6 @@
                                     <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
                                         <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
-                                        <span class="help-block">(*) Ingrese el nombre de la categoría</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -111,7 +110,12 @@
                                         <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripción">
                                     </div>
                                 </div>
-                                <div></div>
+                                <div v-show="categoryError" class="form-group row div-error"> 
+                                    <div class="text-center text-error">
+                                        <div v-for="error in showCategoryMsgError" :key="error" v-text="error">
+                                        </div> 
+                                    </div> 
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
@@ -202,7 +206,7 @@
                 this.categoryError=0;
                 this.showCategoryMsgError=[];
                 if(!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
-                if(this.showCategoryMsgError) this.categoryError=1;
+                if(this.showCategoryMsgError.length) this.categoryError=1;
                 return this.categoryError;
             },
             closeModal()
@@ -255,5 +259,15 @@
         opacity: 1 !important;
         position: absolute !important;
         background-color: #3c29297a !important;  
+    }
+    .div-error
+    {
+        display: flex;
+        justify-content: center;
+    }
+    .text-error
+    {
+        color: red !important;
+        font-weight: bold;
     }
 </style>
