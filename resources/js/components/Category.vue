@@ -166,7 +166,8 @@
                 modalTitle: '',
                 actionType: 0,
                 categoryError: 0,
-                showCategoryMsgError: []
+                showCategoryMsgError: [],
+                idCategory=0,
             }
         },
         methods: {
