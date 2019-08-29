@@ -11,7 +11,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Categorías
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#modalNuevo">
+                        <button type="button" @click="openModal('category','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                     </div>
@@ -40,10 +40,10 @@
                             <tbody>
                                 <tr v-for="category in categoryArray" :key="category.id"> 
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#modalNuevo">
+                                        <button type="button" class="btn btn-warning btn-sm" @click="openModal('category','update',category)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
-                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#modalEliminar">
+                                        <button type="button" class="btn btn-danger btn-sm">
                                           <i class="icon-trash"></i>
                                         </button>
                                     </td>
@@ -87,11 +87,11 @@
                 <!-- Fin ejemplo de tabla Listado -->
             </div>
             <!--Inicio del modal agregar/actualizar-->
-            <div class="modal fade" id="modalNuevo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" :class="{'show': modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Agregar categoría</h4>
+                            <h4 class="modal-title" v-text="modalTitle"></h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                               <span aria-hidden="true">×</span>
                             </button>
@@ -155,7 +155,9 @@
             return {
                 name: '',
                 description: '',
-                categoryArray: []
+                categoryArray: [],
+                modal: 0,
+                modalTitle: ''
             }
         },
         methods: {
@@ -167,6 +169,34 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+            registerCategory()
+            {
+
+            },
+            openModal(model, action, data=[])
+            {
+                switch(model)
+                {
+                    case "category":
+                    {
+                        switch(action)
+                        {
+                            case "register":
+                            {
+                                this.modal=1;
+                                this.modalTitle= 'Registrar categoría';
+                                this.name='';
+                                this.description='';
+                                break;
+                            }
+                            case "update":
+                            {
+
+                            }
+                        }
+                    }
+                }
             }
         },
         mounted() {
@@ -174,3 +204,17 @@
         }
     }
 </script>
+<style>
+    .modal-content
+    {
+        width: 100% !important;
+        position: absolute !important; 
+    }
+    .show
+    {
+        display: list-item !important;
+        opacity: 1 !important;
+        position: absolute !important;
+        background-color: #3c29297a !important;  
+    }
+</style>
