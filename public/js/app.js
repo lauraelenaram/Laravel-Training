@@ -1923,7 +1923,14 @@ __webpack_require__.r(__webpack_exports__);
                 }
 
               case "update":
-                {}
+                {
+                  this.modal = 1;
+                  this.modalTitle = "Actualizar categoría";
+                  this.actionType = 2;
+                  this.name = data['name'];
+                  this.description = data['description'];
+                  break;
+                }
             }
           }
       }
