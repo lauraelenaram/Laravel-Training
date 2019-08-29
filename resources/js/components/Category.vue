@@ -92,7 +92,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h4 class="modal-title" v-text="modalTitle"></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <button type="button" class="close" @click="closeModal()" aria-label="Close">
                               <span aria-hidden="true">×</span>
                             </button>
                         </div>
@@ -101,21 +101,22 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
-                                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre de categoría">
+                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
                                         <span class="help-block">(*) Ingrese el nombre de la categoría</span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
                                     <div class="col-md-9">
-                                        <input type="email" id="descripcion" name="descripcion" class="form-control" placeholder="Enter Email">
+                                        <input type="email" v-model="description" class="form-control" placeholder="Enter Email">
                                     </div>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-primary">Guardar</button>
+                            <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==1">Guardar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==2">Actualizar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -157,7 +158,8 @@
                 description: '',
                 categoryArray: [],
                 modal: 0,
-                modalTitle: ''
+                modalTitle: '',
+                actionType: 0
             }
         },
         methods: {
@@ -174,6 +176,13 @@
             {
 
             },
+            closeModal()
+            {
+                this.modal=0;
+                this.modalTitle='';
+                this.name='';
+                this.description='';
+            },
             openModal(model, action, data=[])
             {
                 switch(model)
@@ -188,6 +197,7 @@
                                 this.modalTitle= 'Registrar categoría';
                                 this.name='';
                                 this.description='';
+                                this.actionType=1;
                                 break;
                             }
                             case "update":
