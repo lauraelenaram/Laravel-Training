@@ -28,11 +28,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $category= new Category();
-        $category->fill([
-            'name'=> $request->name,
-            'description'=> $request->description,
-            'condition'=> '1'
-        ]);
+        $category->fill($request->all());
+        $category->condition= 1;
         $category->save();
     }
 
@@ -47,31 +44,18 @@ class CategoryController extends Controller
     public function update(Request $request)
     {
         $category= Category::findOrFail($request->id);
-        $category->fill([
-            'name'=> $request->name,
-            'description'=> $request->description,
-            'condition'=> '1'
-        ]);
+        $category->fill($request->all());
+        $category->condition= 1;
         $category->save();
     }
 
-    public function activate(Request $request)
+    public function update_condition(Request $request)
     {
         $category= Category::findOrFail($request->id);
-        $category->fill([
-            'condition'=> '1'
-        ]);
+        $category->condition = (0) ? $category->condition=1 : $category->condition=0;
         $category->save();
     }
 
-    public function desactivate(Request $request)
-    {
-        $category= Category::findOrFail($request->id);
-        $category->fill([
-            'condition'=> '0'
-        ]);
-        $category->save();
-    }
 
 
 
