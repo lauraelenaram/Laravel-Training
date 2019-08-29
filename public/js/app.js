@@ -1869,7 +1869,18 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    registerCategory: function registerCategory() {},
+    registerCategory: function registerCategory() {
+      var me = this;
+      axios.post('/categories/register', {
+        'name': this.name,
+        'description': this.description
+      }).then(function (response) {
+        me.closeModal();
+        me.listCategory();
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     closeModal: function closeModal() {
       this.modal = 0;
       this.modalTitle = '';
@@ -33617,7 +33628,10 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
-                          attrs: { type: "email", placeholder: "Enter Email" },
+                          attrs: {
+                            type: "email",
+                            placeholder: "Ingrese descripción"
+                          },
                           domProps: { value: _vm.description },
                           on: {
                             input: function($event) {
@@ -33654,7 +33668,12 @@ var render = function() {
                       "button",
                       {
                         staticClass: "btn btn-primary",
-                        attrs: { type: "button" }
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.registerCategory()
+                          }
+                        }
                       },
                       [_vm._v("Guardar")]
                     )
