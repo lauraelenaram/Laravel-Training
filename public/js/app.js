@@ -1907,20 +1907,22 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       name: '',
-      description: ''
+      description: '',
+      categoryArray: []
     };
   },
   methods: {
     listCategory: function listCategory() {
+      var me = this;
       axios.get('/categories').then(function (response) {
-        console.log(response);
+        me.categoryArray = response.data;
       })["catch"](function (error) {
         console.log(error);
       });
     }
   },
   mounted: function mounted() {
-    console.log('Component mounted.');
+    this.listCategory();
   }
 });
 
@@ -45504,7 +45506,7 @@ window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('category', __webpack_require__(/*! ./components/Category.vue */ "./resources/js/components/Category.vue")["default"]);
+Vue.component('category-component', __webpack_require__(/*! ./components/Category.vue */ "./resources/js/components/Category.vue")["default"]);
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

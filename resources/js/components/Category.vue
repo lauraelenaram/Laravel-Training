@@ -209,13 +209,15 @@
         data() {
             return {
                 name: '',
-                description: ''
+                description: '',
+                categoryArray: []
             }
         },
         methods: {
             listCategory() {
+                let me= this;
                 axios.get('/categories').then(function (response) {
-                    console.log(response);
+                    me.categoryArray= response.data;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -223,7 +225,7 @@
             }
         },
         mounted() {
-            console.log('Component mounted.')
+            this.listCategory();
         }
     }
 </script>
