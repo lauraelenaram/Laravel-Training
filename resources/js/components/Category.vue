@@ -206,6 +206,22 @@
 
 <script>
     export default {
+        data() {
+            return {
+                name: '',
+                description: ''
+            }
+        },
+        methods: {
+            listCategory() {
+                axios.get('/categories').then(function (response) {
+                    console.log(response);
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            }
+        },
         mounted() {
             console.log('Component mounted.')
         }
