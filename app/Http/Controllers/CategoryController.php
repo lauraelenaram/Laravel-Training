@@ -12,8 +12,9 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         return Category::all();
     }
 
@@ -27,10 +28,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= new Category();
         $category->fill($request->all());
         $category->condition= 1;
         $category->save();
+        return $category;
     }
 
 
@@ -43,14 +46,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= Category::findOrFail($request->id);
         $category->fill($request->all());
         $category->condition= 1;
         $category->save();
+        return $category;
     }
 
     public function update_condition(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= Category::findOrFail($request->id);
         $category->condition = ($category->condition) ? false : true;
         $category->save();

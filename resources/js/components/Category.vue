@@ -44,9 +44,9 @@
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
                                         <template>
-                                            <button type="button" class="btn btn-danger btn-sm" @click="ActivateDesactivateCategory(category.id)">
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateCategory(category.id)">
                                                 <i v-if="category.condition" class="icon-trash"></i>
-                                                <i v-else class="icon-ok"></i>
+                                                <i v-else class="icon-check"></i>
                                             </button>
                                         </template>
                                     </td>
@@ -234,8 +234,8 @@
                         {
                             me.listCategory();
                             swalWithBootstrapButtons.fire(
-                            '¡Desactivado!',
-                            'Tu categoría ha sido desactivada.',
+                            '¡Listo!',
+                            'El estado de tu categoría ha sido cambiado.',
                             'success'
                             )
                         }).catch(function (error)
@@ -247,11 +247,7 @@
                     } else if (
                         result.dismiss === Swal.DismissReason.cancel
                     ) {
-                        swalWithBootstrapButtons.fire(
-                        'Cancelado',
-                        'Tu categoría no se desactivará.',
-                        'error'
-                        )
+                        
                     }
                     })
         

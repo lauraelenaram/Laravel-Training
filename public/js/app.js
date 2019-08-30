@@ -1914,13 +1914,11 @@ __webpack_require__.r(__webpack_exports__);
             'id': id
           }).then(function (response) {
             me.listCategory();
-            swalWithBootstrapButtons.fire('¡Desactivado!', 'Tu categoría ha sido desactivada.', 'success');
+            swalWithBootstrapButtons.fire('¡Listo!', 'El estado de tu categoría ha sido cambiado.', 'success');
           })["catch"](function (error) {
             console.log(error);
           });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelado', 'Tu categoría no se desactivará.', 'error');
-        }
+        } else if (result.dismiss === Swal.DismissReason.cancel) {}
       });
     },
     validateCategory: function validateCategory() {
@@ -33546,7 +33544,7 @@ var render = function() {
                             [
                               category.condition
                                 ? _c("i", { staticClass: "icon-trash" })
-                                : _c("i", { staticClass: "icon-ok" })
+                                : _c("i", { staticClass: "icon-check" })
                             ]
                           )
                         ]
