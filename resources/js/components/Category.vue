@@ -121,7 +121,7 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
                             <button type="button" class="btn btn-primary" v-if="actionType==1" @click="registerCategory()">Guardar</button>
-                            <button type="button" class="btn btn-primary" v-if="actionType==2">Actualizar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==2" @click="updateCategory()">Actualizar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -167,7 +167,7 @@
                 actionType: 0,
                 categoryError: 0,
                 showCategoryMsgError: [],
-                idCategory=0,
+                idCategory: 0
             }
         },
         methods: {
@@ -193,6 +193,29 @@
                 {
                     'name': this.name,
                     'description': this.description,
+                }).then(function(response)
+                {
+                    me.closeModal();
+                    me.listCategory();
+                }).catch(function (error)
+                {
+                    console.log(error)
+                });
+            },
+            updateCategory()
+            {
+                if(this.validateCategory())
+                {
+                    return;
+                }
+
+                let me= this;
+
+                axios.put('/categories/update',
+                {
+                    'name': this.name,
+                    'description': this.description,
+                    'id': this.idCategory
                 }).then(function(response)
                 {
                     me.closeModal();
@@ -236,6 +259,7 @@
                             }
                             case "update":
                             {
+                                this.idCategory=data['id'];
                                 this.modal=1;
                                 this.modalTitle="Actualizar categoría";
                                 this.actionType=2;
