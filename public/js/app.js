@@ -1834,10 +1834,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1894,7 +1890,9 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    desactivateCategory: function desactivateCategory() {
+    ActivateDesactivateCategory: function ActivateDesactivateCategory(id, condition) {
+      var _this = this;
+
       var swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
@@ -1903,18 +1901,25 @@ __webpack_require__.r(__webpack_exports__);
         buttonsStyling: false
       });
       swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        title: '¿Estás seguro de cambiar el estado de  esta categoría?',
         type: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
         reverseButtons: true
       }).then(function (result) {
         if (result.value) {
-          swalWithBootstrapButtons.fire('Deleted!', 'Your file has been deleted.', 'success');
+          var me = _this;
+          axios.put('/categories/update/update_condition', {
+            'id': id
+          }).then(function (response) {
+            me.listCategory();
+            swalWithBootstrapButtons.fire('¡Desactivado!', 'Tu categoría ha sido desactivada.', 'success');
+          })["catch"](function (error) {
+            console.log(error);
+          });
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-          swalWithBootstrapButtons.fire('Cancelled', 'Your imaginary file is safe :)', 'error');
+          swalWithBootstrapButtons.fire('Cancelado', 'Tu categoría no se desactivará.', 'error');
         }
       });
     },
@@ -33524,39 +33529,27 @@ var render = function() {
                           [_c("i", { staticClass: "icon-pencil" })]
                         ),
                         _vm._v("  \n                                    "),
-                        category.condition
-                          ? [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-danger btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.desactivateCategory(
-                                        category.id
-                                      )
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "icon-trash" })]
-                              )
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.ActivateDesactivateCategory(
+                                    category.id
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              category.condition
+                                ? _c("i", { staticClass: "icon-trash" })
+                                : _c("i", { staticClass: "icon-ok" })
                             ]
-                          : [
-                              _c(
-                                "button",
-                                {
-                                  staticClass: "btn btn-info btn-sm",
-                                  attrs: { type: "button" },
-                                  on: {
-                                    click: function($event) {
-                                      return _vm.activateCategory(category.id)
-                                    }
-                                  }
-                                },
-                                [_c("i", { staticClass: "icon-ok" })]
-                              )
-                            ]
+                          )
+                        ]
                       ],
                       2
                     ),

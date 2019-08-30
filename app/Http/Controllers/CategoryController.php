@@ -52,8 +52,10 @@ class CategoryController extends Controller
     public function update_condition(Request $request)
     {
         $category= Category::findOrFail($request->id);
-        $category->condition = (0) ? $category->condition=1 : $category->condition=0;
+        $category->condition = ($category->condition) ? false : true;
         $category->save();
+
+        return $category;
     }
 
 

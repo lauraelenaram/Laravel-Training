@@ -43,14 +43,10 @@
                                         <button type="button" class="btn btn-warning btn-sm" @click="openModal('category','update',category)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
-                                        <template v-if="category.condition">
-                                            <button type="button" class="btn btn-danger btn-sm" @click="desactivateCategory(category.id)">
-                                                <i class="icon-trash"></i>
-                                            </button>
-                                        </template>
-                                        <template v-else>
-                                            <button type="button" class="btn btn-info btn-sm" @click="activateCategory(category.id)">
-                                                <i class="icon-ok"></i>
+                                        <template>
+                                            <button type="button" class="btn btn-danger btn-sm" @click="ActivateDesactivateCategory(category.id)">
+                                                <i v-if="category.condition" class="icon-trash"></i>
+                                                <i v-else class="icon-ok"></i>
                                             </button>
                                         </template>
                                     </td>
@@ -209,7 +205,7 @@
                     console.log(error)
                 });
             },
-            desactivateCategory()
+            ActivateDesactivateCategory(id,condition)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -219,31 +215,48 @@
                 buttonsStyling: false
                 })
 
-                swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-                }).then((result) => {
-                if (result.value) {
-                    swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                    )
-                } else if (
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                    )
-                }
-                })
+        
+                    swalWithBootstrapButtons.fire({
+                    title: '¿Estás seguro de cambiar el estado de  esta categoría?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.value)
+                    {
+                        let me= this;
+                        axios.put('/categories/update/update_condition',
+                        {
+                            'id': id
+                        }).then(function(response)
+                        {
+                            me.listCategory();
+                            swalWithBootstrapButtons.fire(
+                            '¡Desactivado!',
+                            'Tu categoría ha sido desactivada.',
+                            'success'
+                            )
+                        }).catch(function (error)
+                        {
+                            console.log(error)
+                        });
+
+                    
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        swalWithBootstrapButtons.fire(
+                        'Cancelado',
+                        'Tu categoría no se desactivará.',
+                        'error'
+                        )
+                    }
+                    })
+        
+
+                
             },
             validateCategory()
             {
