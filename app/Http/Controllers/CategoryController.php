@@ -15,7 +15,19 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $categories= Category::paginate(2);
+
+        $search= $request->search;
+        $judgment= $request->judgment;
+
+        if($search=='')
+        {
+            $categories= Category::orderBy('id','desc')->paginate(2);
+        }
+        else
+        {
+            $categories= Category::where($judgment, 'like', '%'.$search.'%')->orderBy('id','desc')->paginate(7);         
+        }
+        
         return [
             'pagination' => [
                 'total' => $categories->total(),

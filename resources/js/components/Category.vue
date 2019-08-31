@@ -19,12 +19,12 @@
                         <div class="form-group row">
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <select class="form-control col-md-3" id="opcion" name="opcion">
+                                    <select class="form-control col-md-3" v-model="judgment">
                                       <option value="nombre">Nombre</option>
                                       <option value="descripcion">Descripción</option>
                                     </select>
-                                    <input type="text" id="texto" name="texto" class="form-control" placeholder="Texto a buscar">
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="search" @keyup.enter="listCategory(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listCategory(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -66,13 +66,13 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item" v-if="pagination.current_page > 1">
-                                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1)">Ant</a>
+                                    <a class="page-link" href="#" @click.prevent="changePage(pagination.current_page - 1, search, judgment)">Ant</a>
                                 </li>
                                 <li class="page-item" v-for="page in pagesNumber" :key="page" :class="[page == isActived ? 'active' : '']">
-                                    <a class="page-link" href="#" @click.prevent="changePage(page)" v-text="page"></a>
+                                    <a class="page-link" href="#" @click.prevent="changePage(page, search, judgment)" v-text="page"></a>
                                 </li>
                                 <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                                    <a class="page-link" @click.prevent="changePage(pagination.current_page + 1)" href="#">Sig</a>
+                                    <a class="page-link" @click.prevent="changePage(pagination.current_page + 1, search, judgment)" href="#">Sig</a>
                                 </li>
                             </ul>
                         </nav>
@@ -148,7 +148,9 @@
                     'from': 0,
                     'to': 0
                 },
-                offset: 3
+                offset: 3,
+                judgment: 'nombre',
+                search: ''
             }
         },
         computed: {
@@ -185,10 +187,10 @@
             }
         },
         methods: {
-            listCategory(page) 
+            listCategory(page, search, judgment) 
             {
                 let me= this;
-                var url= '/categories?page=' + page
+                var url= '/categories?page=' + page + '&search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
                     me.categoryArray= response.categories.data;
@@ -198,11 +200,11 @@
                     console.log(error);
                 });
             },
-            changePage(page)
+            changePage(page, search, judgment)
             {
                 let me= this;
                 me.pagination.current_page= page;
-                me.listCategory(page);
+                me.listCategory(page, search, judgment);
             },
             registerCategory()
             {
@@ -220,7 +222,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory();
+                    me.listCategory(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -243,7 +245,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory();
+                    me.listCategory(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -276,7 +278,7 @@
                             'id': id
                         }).then(function(response)
                         {
-                            me.listCategory();
+                            me.listCategory(1,'','nombre');
                             swalWithBootstrapButtons.fire(
                             '¡Listo!',
                             'El estado de tu categoría ha sido cambiado.',
@@ -294,9 +296,6 @@
                         
                     }
                     })
-        
-
-                
             },
             validateCategory()
             {
@@ -346,7 +345,7 @@
             }
         },
         mounted() {
-            this.listCategory();
+            this.listCategory(1, this.search, this.judgment);
         }
     }
 </script>
