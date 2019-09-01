@@ -33567,11 +33567,13 @@ var render = function() {
                     }
                   },
                   [
-                    _c("option", { attrs: { value: "nombre" } }, [
-                      _vm._v("Nombre")
-                    ]),
+                    _c(
+                      "option",
+                      { attrs: { value: "name", selected: "selected" } },
+                      [_vm._v("Nombre")]
+                    ),
                     _vm._v(" "),
-                    _c("option", { attrs: { value: "descripcion" } }, [
+                    _c("option", { attrs: { value: "description" } }, [
                       _vm._v("Descripción")
                     ])
                   ]

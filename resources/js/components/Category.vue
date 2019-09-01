@@ -20,8 +20,8 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="judgment">
-                                      <option value="nombre">Nombre</option>
-                                      <option value="descripcion">Descripción</option>
+                                      <option value="name" selected="selected">Nombre</option>
+                                      <option value="description">Descripción</option>
                                     </select>
                                     <input type="text" v-model="search" @keyup.enter="listCategory(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
                                     <button type="submit" @click="listCategory(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>

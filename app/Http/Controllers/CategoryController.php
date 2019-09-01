@@ -21,11 +21,11 @@ class CategoryController extends Controller
 
         if($search=='')
         {
-            $categories= Category::orderBy('id','desc')->paginate(2);
+            $categories= Category::orderBy('id','desc')->paginate(3);
         }
         else
         {
-            $categories= Category::where($judgment, 'like', '%'.$search.'%')->orderBy('id','desc')->paginate(7);         
+            $categories= Category::where($judgment, 'like', '%'.$search.'%')->orderBy('id','desc')->paginate(3);         
         }
         
         return [
