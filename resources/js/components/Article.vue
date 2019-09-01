@@ -8,8 +8,8 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Categorías
-                        <button type="button" @click="openModal('category','register')" class="btn btn-secondary">
+                        <i class="fa fa-align-justify"></i> Artículos
+                        <button type="button" @click="openModal('article','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                     </div>
@@ -21,8 +21,8 @@
                                       <option value="name" selected="selected">Nombre</option>
                                       <option value="description">Descripción</option>
                                     </select>
-                                    <input type="text" v-model="search" @keyup.enter="listCategory(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
-                                    <button type="submit" @click="listCategory(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="search" @keyup.enter="listArticle(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listArticle(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -30,28 +30,36 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
+                                    <th>Código</th>
                                     <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio de venta</th>
+                                    <th>Stock</th>
                                     <th>Descripción</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="category in categoryArray" :key="category.id"> 
+                                <tr v-for="article in articleArray" :key="article.id"> 
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" @click="openModal('category','update',category)"> 
+                                        <button type="button" class="btn btn-warning btn-sm" @click="openModal('article','update',article)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
                                         <template>
-                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateCategory(category.id)">
-                                                <i v-if="category.condition" class="icon-trash"></i>
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateCategory(article.id)">
+                                                <i v-if="article.condition" class="icon-trash"></i>
                                                 <i v-else class="icon-check"></i>
                                             </button>
                                         </template>
                                     </td>
-                                    <td v-text="category.name"></td>
-                                    <td v-text="category.description"></td>
+                                    <td v-text="article.code"></td>
+                                    <td v-text="article.name"></td>
+                                    <td v-text="article.category_name"></td>
+                                    <td v-text="article.sales_price"></td>
+                                    <td v-text="article.stock"></td>
+                                    <td v-text="article.description"></td>
                                     <td>
-                                        <div v-if="category.condition">
+                                        <div v-if="article.condition">
                                             <span class="badge badge-success">Activo</span>
                                         </div>
                                         <div v-else>
@@ -128,15 +136,20 @@
     export default {
         data() {
             return {
+                article_id: 0,
+                category_id: 0,
+                category_name: '',
+                code: '',
                 name: '',
+                sale_price: 0,
+                stock: 0,
                 description: '',
-                categoryArray: [],
+                articleArray: [],
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
-                categoryError: 0,
-                showCategoryMsgError: [],
-                idCategory: 0,
+                articleError: 0,
+                showArticleMsgError: [],
                 pagination: 
                 {
                     'total': 0,
@@ -185,13 +198,13 @@
             }
         },
         methods: {
-            listCategory(page, search, judgment) 
+            listArticle(page, search, judgment) 
             {
                 let me= this;
-                var url= '/categories?page=' + page + '&search=' + search + '&judgment=' + judgment;
+                var url= '/articles?page=' + page + '&search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
-                    me.categoryArray= response.categories.data;
+                    me.articleArray= response.articles.data;
                     me.pagination= response.pagination;
                 })
                 .catch(function (error) {
@@ -202,9 +215,9 @@
             {
                 let me= this;
                 me.pagination.current_page= page;
-                me.listCategory(page, search, judgment);
+                me.listArticle(page, search, judgment);
             },
-            registerCategory()
+            registerArticle()
             {
                 if(this.validateCategory())
                 {
@@ -343,7 +356,7 @@
             }
         },
         mounted() {
-            this.listCategory(1, this.search, this.judgment);
+            this.listArticle(1, this.search, this.judgment);
         }
     }
 </script>
