@@ -1948,17 +1948,21 @@ __webpack_require__.r(__webpack_exports__);
       me.listArticle(page, search, judgment);
     },
     registerArticle: function registerArticle() {
-      if (this.validateCategory()) {
+      if (this.validateArticle()) {
         return;
       }
 
       var me = this;
-      axios.post('/categories/register', {
+      axios.post('/articles/register', {
+        'category_id': this.category_id,
+        'code': this.code,
+        'stock': this.stock,
+        'sale_price': this.sale_price,
         'name': this.name,
         'description': this.description
       }).then(function (response) {
         me.closeModal();
-        me.listCategory(1, '', 'nombre');
+        me.listArticle(1, '', 'nombre');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2011,18 +2015,22 @@ __webpack_require__.r(__webpack_exports__);
         } else if (result.dismiss === Swal.DismissReason.cancel) {}
       });
     },
-    validateCategory: function validateCategory() {
-      this.categoryError = 0;
-      this.showCategoryMsgError = [];
-      if (!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
-      if (this.showCategoryMsgError.length) this.categoryError = 1;
-      return this.categoryError;
+    validateArticle: function validateArticle() {
+      this.articleError = 0;
+      this.showArticleMsgError = [];
+      if (this.category_id == 0) this.showArticleMsgError.push("Seleccione una categoría");
+      if (!this.name) this.showArticleMsgError.push("El nombre del artículo no puede estar vacío");
+      if (!this.stock) this.showArticleMsgError.push("El stock del artículo debe ser un número y no puede estar vacío.");
+      if (!this.sale_price) this.showArticleMsgError.push("El precio de venta del artículo debe ser un número y no puede estar vacío.");
+      if (this.showArticleMsgError.length) this.articleError = 1;
+      return this.articleError;
     },
     closeModal: function closeModal() {
       this.modal = 0;
       this.modalTitle = '';
-      this.name = '';
-      this.description = '';
+      this.category_id = 0, this.category_name = '', this.code = '', this.name = '';
+      this.sale_price = 0, this.stock = 0, this.description = '';
+      this.articleError = 0;
     },
     openModal: function openModal(model, action) {
       var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
@@ -2035,7 +2043,12 @@ __webpack_require__.r(__webpack_exports__);
                 {
                   this.modal = 1;
                   this.modalTitle = 'Registrar artículo';
+                  this.category_id = 0;
+                  this.category_name = '';
+                  this.code = '';
                   this.name = '';
+                  this.sale_price = 0;
+                  this.stock = 0;
                   this.description = '';
                   this.actionType = 1;
                   break;
@@ -2043,11 +2056,15 @@ __webpack_require__.r(__webpack_exports__);
 
               case "update":
                 {
-                  this.idCategory = data['id'];
                   this.modal = 1;
                   this.modalTitle = "Actualizar artículo";
                   this.actionType = 2;
+                  this.article_id = data['id'];
+                  this.category_id = data['category_id'];
+                  this.code = data['code'];
                   this.name = data['name'];
+                  this.stock = data['stock'];
+                  this.sale_price = data['sale_price'];
                   this.description = data['description'];
                   break;
                 }
@@ -34595,7 +34612,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            return _vm.registerCategory()
+                            return _vm.registerArticle()
                           }
                         }
                       },
@@ -34611,7 +34628,7 @@ var render = function() {
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
-                            return _vm.updateCategory()
+                            return _vm.updateArticle()
                           }
                         }
                       },
