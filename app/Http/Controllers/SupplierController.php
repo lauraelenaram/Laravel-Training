@@ -48,22 +48,23 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-
+            
         try
         {
             DB::beginTransaction();
 
-            $people= new Person();
+            $people = new Person();
             $people->fill($request->all());
             $people->save();
+            
 
             $supplier= new Supplier();
             $supplier->fill($request->all());
-            $supplier->id= $people->id;
+            $supplier->id = $people->id;
             $supplier->save();
+            DB::commit();  
             return $supplier;
-
-            DB::commit();        }
+        }
         catch (Exception $e)
         {
             DB::rollBack();
@@ -85,9 +86,9 @@ class SupplierController extends Controller
 
             $supplier->fill($request->all());
             $supplier->save();
+            DB::commit(); 
             return $supplier;
-
-            DB::commit();        }
+       }
         catch (Exception $e)
         {
             DB::rollBack();

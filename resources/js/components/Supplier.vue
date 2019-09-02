@@ -127,6 +127,19 @@
                                         <input type="email" v-model="email" class="form-control" placeholder="Email">
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Contacto</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="contact" class="form-control" placeholder="Nombre del contacto">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Teléfono del contacto</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="contact_telephone" class="form-control" placeholder="Teléfono del contacto">
+                                    </div>
+                                </div>
+
                                 <div v-show="personError" class="form-group row div-error"> 
                                     <div class="text-center text-error">
                                         <div v-for="error in showPersonMsgError" :key="error" v-text="error">
@@ -237,21 +250,24 @@
             },
             registerPerson()
             {
+                console.log(this.name);
                 if(this.validatePerson())
                 {
                     return;
                 }
 
                 let me= this;
-
-                axios.post('/clients/register',
+                  
+                axios.post('/suppliers/register',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
                     'address': this.address,
                     'telephone': this.telephone,
-                    'email': this.email
+                    'email': this.email,
+                    'contact': this.contact,
+                    'contact_telephone': this.contact_telephone
                 }).then(function(response)
                 {
                     me.closeModal();
@@ -270,7 +286,7 @@
 
                 let me= this;
 
-                axios.put('/clients/update',
+                axios.put('/suppliers/update',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
@@ -278,6 +294,8 @@
                     'address': this.address,
                     'telephone': this.telephone,
                     'email': this.email,
+                    'contact': this.contact,
+                    'contact_telephone': this.contact_telephone,
                     'id': this.person_id
                 }).then(function(response)
                 {
@@ -301,12 +319,14 @@
                 this.modal=0;
                 this.modalTitle='';
                 this.name='';
-                this.document_type='DNI';
+                this.document_type='RUC';
                 this.document_number='';
                 this.address='';
                 this.telephone='';
                 this.personError=0;
                 this.email='';
+                this.contact='';
+                this.contact_telephone= '';
             },
             openModal(model, action, data=[])
             {
@@ -319,9 +339,11 @@
                             case "register":
                             {
                                 this.modal=1;
-                                this.modalTitle='Registrar persona';
+                                this.modalTitle='Registrar proveedor';
                                 this.name='';
-                                this.document_type='DNI';
+                                this.contact='';
+                                this.contact_telephone='';
+                                this.document_type='RUC';
                                 this.document_number='';
                                 this.address='';
                                 this.telephone='';
@@ -333,9 +355,11 @@
                             {
                                 this.person_id=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar cliente";
+                                this.modalTitle="Actualizar proveedor";
                                 this.actionType=2;
                                 this.name=data['name'];
+                                this.contact=data['contact'];
+                                this.contact_telephone=data['contact_telephone'];
                                 this.document_type= data['document_type'];
                                 this.document_number= data['document_number'];
                                 this.address= data['address'];
