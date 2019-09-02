@@ -1988,7 +1988,7 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    ActivateDesactivateCategory: function ActivateDesactivateCategory(id, condition) {
+    ActivateDesactivateArticle: function ActivateDesactivateArticle(id, condition) {
       var _this = this;
 
       var swalWithBootstrapButtons = Swal.mixin({
@@ -1999,7 +1999,7 @@ __webpack_require__.r(__webpack_exports__);
         buttonsStyling: false
       });
       swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de cambiar el estado de  esta categoría?',
+        title: '¿Estás seguro de cambiar el estado de este artículo?',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Aceptar',
@@ -2008,11 +2008,11 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           var me = _this;
-          axios.put('/categories/update/update_condition', {
+          axios.put('/articles/update/update_condition', {
             'id': id
           }).then(function (response) {
-            me.listCategory(1, '', 'nombre');
-            swalWithBootstrapButtons.fire('¡Listo!', 'El estado de tu categoría ha sido cambiado.', 'success');
+            me.listArticle(1, '', 'nombre');
+            swalWithBootstrapButtons.fire('¡Listo!', 'El estado de tu artículo ha sido cambiado.', 'success');
           })["catch"](function (error) {
             console.log(error);
           });
@@ -34111,7 +34111,7 @@ var render = function() {
                               attrs: { type: "button" },
                               on: {
                                 click: function($event) {
-                                  return _vm.ActivateDesactivateCategory(
+                                  return _vm.ActivateDesactivateArticle(
                                     article.id
                                   )
                                 }

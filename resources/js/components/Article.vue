@@ -46,7 +46,7 @@
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
                                         <template>
-                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateCategory(article.id)">
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateArticle(article.id)">
                                                 <i v-if="article.condition" class="icon-trash"></i>
                                                 <i v-else class="icon-check"></i>
                                             </button>
@@ -310,7 +310,7 @@
                     console.log(error)
                 });
             },
-            ActivateDesactivateCategory(id,condition)
+            ActivateDesactivateArticle(id,condition)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -322,7 +322,7 @@
 
         
                     swalWithBootstrapButtons.fire({
-                    title: '¿Estás seguro de cambiar el estado de  esta categoría?',
+                    title: '¿Estás seguro de cambiar el estado de este artículo?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -332,15 +332,15 @@
                     if (result.value)
                     {
                         let me= this;
-                        axios.put('/categories/update/update_condition',
+                        axios.put('/articles/update/update_condition',
                         {
                             'id': id
                         }).then(function(response)
                         {
-                            me.listCategory(1,'','nombre');
+                            me.listArticle(1,'','nombre');
                             swalWithBootstrapButtons.fire(
                             '¡Listo!',
-                            'El estado de tu categoría ha sido cambiado.',
+                            'El estado de tu artículo ha sido cambiado.',
                             'success'
                             )
                         }).catch(function (error)
