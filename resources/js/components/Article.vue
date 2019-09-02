@@ -99,9 +99,36 @@
                         <div class="modal-body">
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="category_id">
+                                            <option value="0" disabled>Seleccione</option>
+                                            <option v-for="category in arrayCategory" :key="category.id" :value="category.id" v-text="category.name"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Código</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="code" class="form-control" placeholder="Código de barras">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
+                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de artículo">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Precio de venta</label>
+                                    <div class="col-md-9">
+                                        <input type="number" v-model="sale_price" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Stock</label>
+                                    <div class="col-md-9">
+                                        <input type="number" v-model="stock" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -110,9 +137,9 @@
                                         <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripción">
                                     </div>
                                 </div>
-                                <div v-show="categoryError" class="form-group row div-error"> 
+                                <div v-show="articleError" class="form-group row div-error"> 
                                     <div class="text-center text-error">
-                                        <div v-for="error in showCategoryMsgError" :key="error" v-text="error">
+                                        <div v-for="error in showArticleMsgError" :key="error" v-text="error">
                                         </div> 
                                     </div> 
                                 </div>
@@ -161,7 +188,8 @@
                 },
                 offset: 3,
                 judgment: 'nombre',
-                search: ''
+                search: '',
+                arrayCategory: []
             }
         },
         computed: {
@@ -206,6 +234,18 @@
                     var response= response.data;
                     me.articleArray= response.articles.data;
                     me.pagination= response.pagination;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            selectCategory()
+            {
+                let me= this;
+                var url= '/categories/selectCategory' ;
+                axios.get(url).then(function (response) {
+                   var response= response.data;
+                    me.arrayCategory= response.categories;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -327,14 +367,14 @@
             {
                 switch(model)
                 {
-                    case "category":
+                    case "article":
                     {
                         switch(action)
                         {
                             case "register":
                             {
                                 this.modal=1;
-                                this.modalTitle= 'Registrar categoría';
+                                this.modalTitle= 'Registrar artículo';
                                 this.name='';
                                 this.description='';
                                 this.actionType=1;
@@ -344,7 +384,7 @@
                             {
                                 this.idCategory=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar categoría";
+                                this.modalTitle="Actualizar artículo";
                                 this.actionType=2;
                                 this.name= data['name'];
                                 this.description= data['description'];
@@ -353,6 +393,7 @@
                         }
                     }
                 }
+                this.selectCategory();
             }
         },
         mounted() {

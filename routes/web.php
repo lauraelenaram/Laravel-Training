@@ -19,6 +19,7 @@ Route::get('/categories','CategoryController@index');
 Route::post('/categories/register','CategoryController@store');
 Route::put('/categories/update','CategoryController@update');
 Route::put('/categories/update/update_condition','CategoryController@update_condition');
+Route::get('/categories/selectCategory','CategoryController@selectCategory');
 
 Route::get('/articles','ArticleController@index');
 Route::post('/articles/register','ArticleController@store');
