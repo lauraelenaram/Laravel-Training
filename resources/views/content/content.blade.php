@@ -9,7 +9,7 @@
         </template>
 
         <template v-if="menu==2">
-            <h1>Contenido del menu 2</h1>
+        <article-component></article-component>
         </template>
 
         <template v-if="menu==3">
@@ -17,7 +17,7 @@
         </template>
 
         <template v-if="menu==4">
-            <h1>Contenido del menu 4</h1>
+            <supplier-component></supplier-component>
         </template>
 
         <template v-if="menu==5">
@@ -25,7 +25,7 @@
         </template>
 
         <template v-if="menu==6">
-            <h1>Contenido del menu 6</h1>
+            <client-component></client-component>
         </template>
 
         <template v-if="menu==7">

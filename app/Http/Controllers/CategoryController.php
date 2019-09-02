@@ -12,9 +12,42 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Category::all();
+        if(!$request->ajax()) return redirect('/');
+
+        $search= $request->search;
+        $judgment= $request->judgment;
+
+        if($search=='')
+        {
+            $categories= Category::orderBy('id','desc')->paginate(3);
+        }
+        else
+        {
+            $categories= Category::where($judgment, 'like', '%'.$search.'%')->orderBy('id','desc')->paginate(3);         
+        }
+        
+        return [
+            'pagination' => [
+                'total' => $categories->total(),
+                'current_page' => $categories->currentPage(),
+                'per_page' => $categories->perPage(),
+                'last_page' => $categories->lastPage(),
+                'from' => $categories->firstItem(),
+                'to' => $categories->lastItem()
+            ],
+            'categories' => $categories
+        ];
+    }
+
+    public function selectCategory(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+        $categories= Category::where('condition','=','1')
+        ->select('id','name')->orderBy('name','asc')->get();
+
+        return ['categories' => $categories];
     }
 
 
@@ -27,10 +60,12 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= new Category();
         $category->fill($request->all());
         $category->condition= 1;
         $category->save();
+        return $category;
     }
 
 
@@ -43,17 +78,22 @@ class CategoryController extends Controller
      */
     public function update(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= Category::findOrFail($request->id);
         $category->fill($request->all());
         $category->condition= 1;
         $category->save();
+        return $category;
     }
 
     public function update_condition(Request $request)
     {
+        if(!$request->ajax()) return redirect('/');
         $category= Category::findOrFail($request->id);
-        $category->condition = (0) ? $category->condition=1 : $category->condition=0;
+        $category->condition = ($category->condition) ? false : true;
         $category->save();
+
+        return $category;
     }
 
 

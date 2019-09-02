@@ -8,8 +8,8 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Categorías
-                        <button type="button" @click="openModal('category','register')" class="btn btn-secondary">
+                        <i class="fa fa-align-justify"></i> Artículos
+                        <button type="button" @click="openModal('article','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
                     </div>
@@ -21,8 +21,8 @@
                                       <option value="name" selected="selected">Nombre</option>
                                       <option value="description">Descripción</option>
                                     </select>
-                                    <input type="text" v-model="search" @keyup.enter="listCategory(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
-                                    <button type="submit" @click="listCategory(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="search" @keyup.enter="listArticle(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listArticle(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -30,28 +30,36 @@
                             <thead>
                                 <tr>
                                     <th>Opciones</th>
+                                    <th>Código</th>
                                     <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Precio de venta</th>
+                                    <th>Stock</th>
                                     <th>Descripción</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="category in categoryArray" :key="category.id"> 
+                                <tr v-for="article in articleArray" :key="article.id"> 
                                     <td>
-                                        <button type="button" class="btn btn-warning btn-sm" @click="openModal('category','update',category)"> 
+                                        <button type="button" class="btn btn-warning btn-sm" @click="openModal('article','update',article)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
                                         <template>
-                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateCategory(category.id)">
-                                                <i v-if="category.condition" class="icon-trash"></i>
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateArticle(article.id)">
+                                                <i v-if="article.condition" class="icon-trash"></i>
                                                 <i v-else class="icon-check"></i>
                                             </button>
                                         </template>
                                     </td>
-                                    <td v-text="category.name"></td>
-                                    <td v-text="category.description"></td>
+                                    <td v-text="article.code"></td>
+                                    <td v-text="article.name"></td>
+                                    <td v-text="article.category_name"></td>
+                                    <td v-text="article.sale_price"></td>
+                                    <td v-text="article.stock"></td>
+                                    <td v-text="article.description"></td>
                                     <td>
-                                        <div v-if="category.condition">
+                                        <div v-if="article.condition">
                                             <span class="badge badge-success">Activo</span>
                                         </div>
                                         <div v-else>
@@ -91,9 +99,39 @@
                         <div class="modal-body">
                             <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                 <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Categoría</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="category_id">
+                                            <option value="0" disabled>Seleccione</option>
+                                            <option v-for="category in arrayCategory" :key="category.id" :value="category.id" v-text="category.name"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Código</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="code" class="form-control" placeholder="Código de barras">
+                                        <barcode :value="code" :options="{format: 'EAN-13'}">
+                                            Generando código de barras.
+                                        </barcode>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de categoría">
+                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de artículo">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Precio de venta</label>
+                                    <div class="col-md-9">
+                                        <input type="number" v-model="sale_price" class="form-control" placeholder="">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Stock</label>
+                                    <div class="col-md-9">
+                                        <input type="number" v-model="stock" class="form-control" placeholder="">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -102,9 +140,9 @@
                                         <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripción">
                                     </div>
                                 </div>
-                                <div v-show="categoryError" class="form-group row div-error"> 
+                                <div v-show="articleError" class="form-group row div-error"> 
                                     <div class="text-center text-error">
-                                        <div v-for="error in showCategoryMsgError" :key="error" v-text="error">
+                                        <div v-for="error in showArticleMsgError" :key="error" v-text="error">
                                         </div> 
                                     </div> 
                                 </div>
@@ -112,8 +150,8 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
-                            <button type="button" class="btn btn-primary" v-if="actionType==1" @click="registerCategory()">Guardar</button>
-                            <button type="button" class="btn btn-primary" v-if="actionType==2" @click="updateCategory()">Actualizar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==1" @click="registerArticle()">Guardar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==2" @click="updateArticle()">Actualizar</button>
                         </div>
                     </div>
                     <!-- /.modal-content -->
@@ -125,18 +163,25 @@
 </template>
 
 <script>
+    import VueBarcode from 'vue-barcode';
     export default {
-        data() {
+        data() 
+        {
             return {
+                article_id: 0,
+                category_id: 0,
+                category_name: '',
+                code: '',
                 name: '',
+                sale_price: 0,
+                stock: 0,
                 description: '',
-                categoryArray: [],
+                articleArray: [],
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
-                categoryError: 0,
-                showCategoryMsgError: [],
-                idCategory: 0,
+                articleError: 0,
+                showArticleMsgError: [],
                 pagination: 
                 {
                     'total': 0,
@@ -148,10 +193,16 @@
                 },
                 offset: 3,
                 judgment: 'nombre',
-                search: ''
+                search: '',
+                arrayCategory: []
             }
         },
-        computed: {
+        components: 
+        {
+            'barcode': VueBarcode
+        },
+        computed: 
+        {
             isActived: function()
             {
                 return this.pagination.current_page;
@@ -184,15 +235,28 @@
                 return pagesArray;
             }
         },
-        methods: {
-            listCategory(page, search, judgment) 
+        methods: 
+        {
+            listArticle(page, search, judgment) 
             {
                 let me= this;
-                var url= '/categories?page=' + page + '&search=' + search + '&judgment=' + judgment;
+                var url= '/articles?page=' + page + '&search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
-                    me.categoryArray= response.categories.data;
+                    me.articleArray= response.articles.data;
                     me.pagination= response.pagination;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            selectCategory()
+            {
+                let me= this;
+                var url= '/categories/selectCategory' ;
+                axios.get(url).then(function (response) {
+                   var response= response.data;
+                    me.arrayCategory= response.categories;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -202,54 +266,62 @@
             {
                 let me= this;
                 me.pagination.current_page= page;
-                me.listCategory(page, search, judgment);
+                me.listArticle(page, search, judgment);
             },
-            registerCategory()
+            registerArticle()
             {
-                if(this.validateCategory())
+                if(this.validateArticle())
                 {
                     return;
                 }
 
                 let me= this;
 
-                axios.post('/categories/register',
+                axios.post('/articles/register',
                 {
+                    'category_id': this.category_id,
+                    'code': this.code,
+                    'stock': this.stock,
+                    'sale_price': this.sale_price,
                     'name': this.name,
-                    'description': this.description,
+                    'description': this.description
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listArticle(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
             },
-            updateCategory()
+            updateArticle()
             {
-                if(this.validateCategory())
+                if(this.validateArticle())
                 {
                     return;
                 }
 
                 let me= this;
 
-                axios.put('/categories/update',
+                axios.put('/articles/update',
                 {
+                    'id': this.article_id,
+                    'category_id': this.category_id,
+                    'code': this.code,
+                    'stock': this.stock,
+                    'sale_price': this.sale_price,
                     'name': this.name,
                     'description': this.description,
-                    'id': this.idCategory
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listArticle(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
             },
-            ActivateDesactivateCategory(id,condition)
+            ActivateDesactivateArticle(id,condition)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -261,7 +333,7 @@
 
         
                     swalWithBootstrapButtons.fire({
-                    title: '¿Estás seguro de cambiar el estado de  esta categoría?',
+                    title: '¿Estás seguro de cambiar el estado de este artículo?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -271,15 +343,15 @@
                     if (result.value)
                     {
                         let me= this;
-                        axios.put('/categories/update/update_condition',
+                        axios.put('/articles/update/update_condition',
                         {
                             'id': id
                         }).then(function(response)
                         {
-                            me.listCategory(1,'','nombre');
+                            me.listArticle(1,'','nombre');
                             swalWithBootstrapButtons.fire(
                             '¡Listo!',
-                            'El estado de tu categoría ha sido cambiado.',
+                            'El estado de tu artículo ha sido cambiado.',
                             'success'
                             )
                         }).catch(function (error)
@@ -295,55 +367,77 @@
                     }
                     })
             },
-            validateCategory()
+            validateArticle()
             {
-                this.categoryError=0;
-                this.showCategoryMsgError=[];
-                if(!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
-                if(this.showCategoryMsgError.length) this.categoryError=1;
-                return this.categoryError;
+                this.articleError=0;
+                this.showArticleMsgError=[];
+
+                if(this.category_id==0) this.showArticleMsgError.push("Seleccione una categoría");
+                if(!this.name) this.showArticleMsgError.push("El nombre del artículo no puede estar vacío");
+                if(!this.stock) this.showArticleMsgError.push("El stock del artículo debe ser un número y no puede estar vacío.");
+                if(!this.sale_price) this.showArticleMsgError.push("El precio de venta del artículo debe ser un número y no puede estar vacío.");
+                
+                if(this.showArticleMsgError.length) this.articleError=1;
+                return this.articleError;
             },
             closeModal()
             {
                 this.modal=0;
                 this.modalTitle='';
+                this.category_id= 0,
+                this.category_name= '',
+                this.code= '',
                 this.name='';
+                this.sale_price= 0,
+                this.stock= 0,
                 this.description='';
+                this.articleError= 0
             },
             openModal(model, action, data=[])
             {
                 switch(model)
                 {
-                    case "category":
+                    case "article":
                     {
                         switch(action)
                         {
                             case "register":
                             {
                                 this.modal=1;
-                                this.modalTitle= 'Registrar categoría';
-                                this.name='';
+                                this.modalTitle= 'Registrar artículo';
+                                this.category_id= 0;
+                                this.category_name='';
+                                this.code= '';
+                                this.name= '';
+                                this.sale_price= 0;
+                                this.stock= 0;
                                 this.description='';
                                 this.actionType=1;
                                 break;
                             }
                             case "update":
                             {
-                                this.idCategory=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar categoría";
+                                this.modalTitle="Actualizar artículo";
                                 this.actionType=2;
+                                this.article_id=data['id'];
+                                this.category_id=data['category_id'];
+                                this.code= data['code'];
                                 this.name= data['name'];
+                                this.stock= data['stock'];
+                                this.sale_price= data['sale_price'];
                                 this.description= data['description'];
                                 break;
                             }
                         }
                     }
                 }
+                this.selectCategory();
             }
         },
-        mounted() {
-            this.listCategory(1, this.search, this.judgment);
+        mounted() 
+        {
+            this.listArticle(1, this.search, this.judgment);
         }
     }
 </script>
