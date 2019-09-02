@@ -74,7 +74,7 @@
                 <!-- Fin ejemplo de tabla Listado -->
             </div>
             <!--Inicio del modal agregar/actualizar-->
-            <!--<div class="modal fade" tabindex="-1" :class="{'show': modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
+            <div class="modal fade" tabindex="-1" :class="{'show': modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
                 <div class="modal-dialog modal-primary modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -88,18 +88,46 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre del cliente">
+                                        <input type="text" v-model="name" class="form-control" placeholder="Nombre de la persona">
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="email-input">Descripción</label>
+                                    <label class="col-md-3 form-control-label" for="text-input">Tipo de documento</label>
                                     <div class="col-md-9">
-                                        <input type="email" v-model="description" class="form-control" placeholder="Ingrese descripción">
+                                        <select v-model="document_type" class="form-control">
+                                            <option value="DNI">DNI</option>
+                                            <option value="RUC">RUC</option>
+                                            <option value="PASS">PASAPORTE</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div v-show="categoryError" class="form-group row div-error"> 
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Número de documento</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="document_number" class="form-control" placeholder="Número de documento">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Dirección</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="address" class="form-control" placeholder="Dirección">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="text-input">Teléfono</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="telephone" class="form-control" placeholder="Teléfono">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Email</label>
+                                    <div class="col-md-9">
+                                        <input type="email" v-model="email" class="form-control" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div v-show="personError" class="form-group row div-error"> 
                                     <div class="text-center text-error">
-                                        <div v-for="error in showCategoryMsgError" :key="error" v-text="error">
+                                        <div v-for="error in showPersonMsgError" :key="error" v-text="error">
                                         </div> 
                                     </div> 
                                 </div>
@@ -107,14 +135,14 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
-                            <button type="button" class="btn btn-primary" v-if="actionType==1" @click="registerCategory()">Guardar</button>
-                            <button type="button" class="btn btn-primary" v-if="actionType==2" @click="updateCategory()">Actualizar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==1" @click="registerPerson()">Guardar</button>
+                            <button type="button" class="btn btn-primary" v-if="actionType==2" @click="updatePerson()">Actualizar</button>
                         </div>
                     </div>-->
                     <!-- /.modal-content -->
-               <!-- </div>-->
+                </div>
                 <!-- /.modal-dialog -->
-            <!--</div>-->
+            </div>
             <!--Fin del modal-->
         </main>
 </template>
@@ -203,65 +231,78 @@
                 me.pagination.current_page= page;
                 me.listClient(page, search, judgment);
             },
-            registerCategory()
+            registerPerson()
             {
-                if(this.validateCategory())
+                if(this.validatePerson())
                 {
                     return;
                 }
 
                 let me= this;
 
-                axios.post('/categories/register',
+                axios.post('/clients/register',
                 {
                     'name': this.name,
-                    'description': this.description,
+                    'document_type': this.document_type,
+                    'document_number': this.document_number,
+                    'address': this.address,
+                    'telephone': this.telephone,
+                    'email': this.email
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listClient(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
             },
-            updateCategory()
+            updatePerson()
             {
-                if(this.validateCategory())
+                if(this.validatePerson())
                 {
                     return;
                 }
 
                 let me= this;
 
-                axios.put('/categories/update',
+                axios.put('/clients/update',
                 {
                     'name': this.name,
-                    'description': this.description,
-                    'id': this.idCategory
+                    'document_type': this.document_type,
+                    'document_number': this.document_number,
+                    'address': this.address,
+                    'telephone': this.telephone,
+                    'email': this.email,
+                    'id': this.person_id
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listClient(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
             },
-            validateCategory()
+            validatePerson()
             {
-                this.categoryError=0;
-                this.showCategoryMsgError=[];
-                if(!this.name) this.showCategoryMsgError.push("El nombre de la categoría no puede estar vacío");
-                if(this.showCategoryMsgError.length) this.categoryError=1;
-                return this.categoryError;
+                this.personError=0;
+                this.showPersonMsgError=[];
+                if(!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
+                if(this.showPersonMsgError.length) this.personError=1;
+                return this.personError;
             },
             closeModal()
             {
                 this.modal=0;
                 this.modalTitle='';
                 this.name='';
-                this.description='';
+                this.document_type='DNI';
+                this.document_number='';
+                this.address='';
+                this.telephone='';
+                this.personError=0;
+                this.email='';
             },
             openModal(model, action, data=[])
             {
@@ -273,21 +314,29 @@
                         {
                             case "register":
                             {
-                                /*this.modal=1;
-                                this.modalTitle= 'Registrar categoría';
+                                this.modal=1;
+                                this.modalTitle='Registrar persona';
                                 this.name='';
-                                this.description='';
-                                this.actionType=1;*/
+                                this.document_type='DNI';
+                                this.document_number='';
+                                this.address='';
+                                this.telephone='';
+                                this.email='';
+                                this.actionType=1;
                                 break;
                             }
                             case "update":
                             {
-                                /*this.idCategory=data['id'];
+                                this.person_id=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar categoría";
+                                this.modalTitle="Actualizar cliente";
                                 this.actionType=2;
-                                this.name= data['name'];
-                                this.description= data['description'];*/
+                                this.name=data['name'];
+                                this.document_type= data['document_type'];
+                                this.document_number= data['document_number'];
+                                this.address= data['address'];
+                                this.telephone= data['telephone'];
+                                this.email= data['email'];
                                 break;
                             }
                         }

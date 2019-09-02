@@ -39,20 +39,18 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $person= new Person();
-        $person->fill($request->all());
-        $person->condition= 1;
-        $person->save();
-        return $person;
+        $people= new Person();
+        $people->fill($request->all());
+        $people->save();
+        return $people;
     }
 
     public function update(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $person= Person::findOrFail($request->id);
-        $person->fill($request->all());
-        $person->condition= 1;
-        $person->save();
-        return $person;
+        $people= Person::findOrFail($request->id);
+        $people->fill($request->all());
+        $people->save();
+        return $people;
     }
 }
