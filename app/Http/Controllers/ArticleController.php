@@ -24,7 +24,7 @@ class ArticleController extends Controller
         {
             $articles= Article::join('categories','articles.category_id','=','categories.id')
             ->select('articles.id','articles.category_id','articles.code','articles.name','categories.name as category_name','articles.sale_price','articles.stock','articles.description','articles.condition')
-            ->where('articles'.$judgment, 'like', '%'.$search.'%')
+            ->where('articles.'.$judgment, 'like', '%'.$search.'%')
             ->orderBy('articles.id','desc')->paginate(3);      
         }
         

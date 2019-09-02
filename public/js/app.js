@@ -38083,7 +38083,7 @@ var render = function() {
                     }),
                     _vm._v(" "),
                     _c("td", {
-                      domProps: { textContent: _vm._s(article.sales_price) }
+                      domProps: { textContent: _vm._s(article.sale_price) }
                     }),
                     _vm._v(" "),
                     _c("td", {

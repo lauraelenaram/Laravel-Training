@@ -55,7 +55,7 @@
                                     <td v-text="article.code"></td>
                                     <td v-text="article.name"></td>
                                     <td v-text="article.category_name"></td>
-                                    <td v-text="article.sales_price"></td>
+                                    <td v-text="article.sale_price"></td>
                                     <td v-text="article.stock"></td>
                                     <td v-text="article.description"></td>
                                     <td>
