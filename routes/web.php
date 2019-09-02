@@ -30,3 +30,7 @@ Route::get('/clients','ClientController@index');
 Route::post('/clients/register','ClientController@store');
 Route::put('/clients/update','ClientController@update');
 
+Route::get('/suppliers','SupplierController@index');
+Route::post('/suppliers/register','SupplierController@store');
+Route::put('/suppliers/update','SupplierController@update');
+
