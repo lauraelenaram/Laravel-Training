@@ -26,3 +26,7 @@ Route::post('/articles/register','ArticleController@store');
 Route::put('/articles/update','ArticleController@update');
 Route::put('/articles/update/update_condition','ArticleController@update_condition');
 
+Route::get('/client','ClientController@index');
+Route::post('/client/register','ClientController@store');
+Route::put('/client/update','ClientController@update');
+
