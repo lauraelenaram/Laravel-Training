@@ -273,7 +273,7 @@
                     'stock': this.stock,
                     'sale_price': this.sale_price,
                     'name': this.name,
-                    'description': this.description,
+                    'description': this.description
                 }).then(function(response)
                 {
                     me.closeModal();
@@ -283,24 +283,28 @@
                     console.log(error)
                 });
             },
-            updateCategory()
+            updateArticle()
             {
-                if(this.validateCategory())
+                if(this.validateArticle())
                 {
                     return;
                 }
 
                 let me= this;
 
-                axios.put('/categories/update',
+                axios.put('/articles/update',
                 {
+                    'id': this.article_id,
+                    'category_id': this.category_id,
+                    'code': this.code,
+                    'stock': this.stock,
+                    'sale_price': this.sale_price,
                     'name': this.name,
                     'description': this.description,
-                    'id': this.idCategory
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listArticle(1,'','nombre');
                 }).catch(function (error)
                 {
                     console.log(error)
