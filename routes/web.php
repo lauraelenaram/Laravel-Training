@@ -34,3 +34,5 @@ Route::get('/suppliers','SupplierController@index');
 Route::post('/suppliers/register','SupplierController@store');
 Route::put('/suppliers/update','SupplierController@update');
 
+Route::get('/roles','RolController@index');
+
