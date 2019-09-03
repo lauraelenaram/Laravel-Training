@@ -3561,66 +3561,60 @@ __webpack_require__.r(__webpack_exports__);
       me.pagination.current_page = page;
       me.listPerson(page, search, judgment);
     },
+    registerPerson: function registerPerson() {
+      if (this.validatePerson()) {
+        return;
+      }
 
-    /*registerPerson()
-    {
-        console.log(this.name);
-        if(this.validatePerson())
-        {
-            return;
-        }
-         let me= this;
-          
-        axios.post('/suppliers/register',
-        {
-            'name': this.name,
-            'document_type': this.document_type,
-            'document_number': this.document_number,
-            'address': this.address,
-            'telephone': this.telephone,
-            'email': this.email,
-            'contact': this.contact,
-            'contact_telephone': this.contact_telephone
-        }).then(function(response)
-        {
-            me.closeModal();
-            me.listPerson(1,'','nombre');
-        }).catch(function (error)
-        {
-            console.log(error)
-        });
+      var me = this;
+      axios.post('/users/register', {
+        'name': this.name,
+        'document_type': this.document_type,
+        'document_number': this.document_number,
+        'address': this.address,
+        'telephone': this.telephone,
+        'email': this.email,
+        'user': this.user,
+        'password': this.password,
+        'rol_id': this.rol_id
+      }).then(function (response) {
+        me.closeModal();
+        me.listPerson(1, '', 'nombre');
+      })["catch"](function (error) {
+        console.log("AQUIIIIIIIII");
+      });
     },
-    updatePerson()
-    {
-        if(this.validatePerson())
-        {
-            return;
-        }
-         let me= this;
-         axios.put('/suppliers/update',
-        {
-            'name': this.name,
-            'document_type': this.document_type,
-            'document_number': this.document_number,
-            'address': this.address,
-            'telephone': this.telephone,
-            'email': this.email,
-            'contact': this.contact,
-            'contact_telephone': this.contact_telephone,
-            'id': this.person_id
-        }).then(function(response)
-        {
-            me.closeModal();
-            me.listPerson(1,'','nombre');
-        }).catch(function (error)
-        {
-            console.log(error)
-        });
-    },*/
+    updatePerson: function updatePerson() {
+      if (this.validatePerson()) {
+        return;
+      }
+
+      var me = this;
+      axios.put('/users/update', {
+        'name': this.name,
+        'document_type': this.document_type,
+        'document_number': this.document_number,
+        'address': this.address,
+        'telephone': this.telephone,
+        'email': this.email,
+        'user': this.user,
+        'password': this.password,
+        'rol_id': this.rol_id,
+        'id': this.person_id
+      }).then(function (response) {
+        me.closeModal();
+        me.listPerson(1, '', 'nombre');
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     validatePerson: function validatePerson() {
       this.personError = 0;
       this.showPersonMsgError = [];
       if (!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
+      if (!this.user) this.showPersonMsgError.push("El nombre de usuario no puede estar vacío");
+      if (!this.password) this.showPersonMsgError.push("La contraseña no puede estar vacía");
+      if (this.rol_id == 0) this.showPersonMsgError.push("Debes seleccionar un rol");
       if (this.showPersonMsgError.length) this.personError = 1;
       return this.personError;
     },

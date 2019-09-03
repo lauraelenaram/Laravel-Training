@@ -273,9 +273,8 @@
                 me.pagination.current_page= page;
                 me.listPerson(page, search, judgment);
             },
-            /*registerPerson()
+            registerPerson()
             {
-                console.log(this.name);
                 if(this.validatePerson())
                 {
                     return;
@@ -283,7 +282,7 @@
 
                 let me= this;
                   
-                axios.post('/suppliers/register',
+                axios.post('/users/register',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
@@ -291,15 +290,16 @@
                     'address': this.address,
                     'telephone': this.telephone,
                     'email': this.email,
-                    'contact': this.contact,
-                    'contact_telephone': this.contact_telephone
+                    'user': this.user,
+                    'password': this.password,
+                    'rol_id': this.rol_id,
                 }).then(function(response)
                 {
                     me.closeModal();
                     me.listPerson(1,'','nombre');
                 }).catch(function (error)
                 {
-                    console.log(error)
+                    console.log("AQUIIIIIIIII")
                 });
             },
             updatePerson()
@@ -311,7 +311,7 @@
 
                 let me= this;
 
-                axios.put('/suppliers/update',
+                axios.put('/users/update',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
@@ -319,8 +319,9 @@
                     'address': this.address,
                     'telephone': this.telephone,
                     'email': this.email,
-                    'contact': this.contact,
-                    'contact_telephone': this.contact_telephone,
+                    'user': this.user,
+                    'password': this.password,
+                    'rol_id': this.rol_id,
                     'id': this.person_id
                 }).then(function(response)
                 {
@@ -330,12 +331,17 @@
                 {
                     console.log(error)
                 });
-            },*/
+            },  
             validatePerson()
             {
                 this.personError=0;
                 this.showPersonMsgError=[];
+
                 if(!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
+                if(!this.user) this.showPersonMsgError.push("El nombre de usuario no puede estar vacío");
+                if(!this.password) this.showPersonMsgError.push("La contraseña no puede estar vacía");
+                if(this.rol_id==0) this.showPersonMsgError.push("Debes seleccionar un rol");
+
                 if(this.showPersonMsgError.length) this.personError=1;
                 return this.personError;
             },

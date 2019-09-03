@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\User;
-use App\People;
+use App\Person;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -66,7 +66,7 @@ class UserController extends Controller
             $user->user = $request->user;
             $user->password= bcrypt($request->password);
             $user->condition = '1';
-            $user->rol_id = $people->rol_id;
+            $user->rol_id = $request->rol_id;
             $user->id = $people->id;
             $user->save();
 
