@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
 
             $table->string('user')->unique();
             $table->string('password');
-            $table->string('condition')->default(1);
+            $table->boolean('condition')->default(1);
 
             $table->unsignedBigInteger('rol_id');
             $table->foreign('rol_id')->references('id')->on('roles'); 
