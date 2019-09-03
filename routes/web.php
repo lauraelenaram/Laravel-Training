@@ -36,3 +36,8 @@ Route::put('/suppliers/update','SupplierController@update');
 
 Route::get('/roles','RolController@index');
 
+Route::get('/users','UserController@index');
+Route::post('/users/register','UserController@store');
+Route::put('/users/update','UserController@update');
+Route::put('/users/update/update_condition','UserController@update_condition');
+
