@@ -120,7 +120,7 @@
                                 <div class="form-group row">
                                     <label class="col-md-3 form-control-label" for="text-input">Teléfono</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="phone" class="form-control" placeholder="Teléfono">
+                                        <input type="text" v-model="telephone" class="form-control" placeholder="Teléfono">
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -130,15 +130,24 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="email-input">Usuario</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Rol (*)</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="user" class="form-control" placeholder="Nombre del usuario">
+                                        <select class="form-control" v-model="rol_id">
+                                            <option value="0">Seleccione un rol</option>
+                                            <option v-for="rol in rolArray" :key="rol.id" :value="rol.id"  v-text="rol.name"></option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-md-3 form-control-label" for="email-input">Teléfono del rol</label>
+                                    <label class="col-md-3 form-control-label" for="email-input">Usuario (*)</label>
                                     <div class="col-md-9">
-                                        <input type="text" v-model="rol" class="form-control" placeholder="Rol">
+                                        <input type="text" v-model="user" class="form-control" placeholder="Nombre de usuario">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Contraseña (*)</label>
+                                    <div class="col-md-9">
+                                        <input type="password" v-model="password" class="form-control" placeholder="Contraseña de acceso">
                                     </div>
                                 </div>
 
@@ -179,6 +188,7 @@
                 password: '',
                 rol_id: 0,
                 personArray: [],
+                rolArray: [],
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
@@ -240,6 +250,18 @@
                     var response= response.data;
                     me.personArray= response.people.data;
                     me.pagination= response.pagination;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            selectRol()
+            {
+                let me= this;
+                var url= '/roles/selectRol';
+                axios.get(url).then(function (response) {
+                    var response= response.data;
+                    me.rolArray= response.roles;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -322,17 +344,19 @@
                 this.modal=0;
                 this.modalTitle='';
                 this.name='';
-                this.document_type='RUC';
+                this.document_type='DNI';
                 this.document_number='';
                 this.address='';
                 this.telephone='';
-                this.personError=0;
                 this.email='';
-                this.contact='';
-                this.contact_telephone= '';
+                this.user='';
+                this.password= '';
+                this.rol_id=0;
+                this.personError=0;
             },
             openModal(model, action, data=[])
             {
+                this.selectRol(); 
                 switch(model)
                 {
                     case "person":
@@ -342,32 +366,34 @@
                             case "register":
                             {
                                 this.modal=1;
-                                this.modalTitle='Registrar proveedor';
+                                this.modalTitle='Registrar usuario';
                                 this.name='';
-                                this.contact='';
-                                this.contact_telephone='';
-                                this.document_type='RUC';
+                                this.document_type='DNI';
                                 this.document_number='';
                                 this.address='';
                                 this.telephone='';
                                 this.email='';
+                                this.user='';
+                                this.password='';
+                                this.rol_id=0;
                                 this.actionType=1;
                                 break;
                             }
                             case "update":
                             {
-                                this.person_id=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar proveedor";
+                                this.modalTitle="Actualizar usuario";
                                 this.actionType=2;
+                                this.person_id=data['id'];
                                 this.name=data['name'];
-                                this.contact=data['contact'];
-                                this.contact_telephone=data['contact_telephone'];
                                 this.document_type= data['document_type'];
                                 this.document_number= data['document_number'];
                                 this.address= data['address'];
                                 this.telephone= data['telephone'];
                                 this.email= data['email'];
+                                this.user= data['user'];
+                                this.password= data['password'];
+                                this.rol_id= data['rol_id'];
                                 break;
                             }
                         }
