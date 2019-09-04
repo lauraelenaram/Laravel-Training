@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/main', function () {
     return view('content/content');
-});
+}) -> name('main'); //alias
 
 Route::get('/categories','CategoryController@index');
 Route::post('/categories/register','CategoryController@store');
@@ -42,6 +42,7 @@ Route::post('/users/register','UserController@store');
 Route::put('/users/update','UserController@update');
 Route::put('/users/update/update_condition','UserController@update_condition');
 
+Route::get('/', 'Auth\LoginController@showLoginForm');
+Route::post('/login', 'Auth\LoginController@login')->name('login');
 
-Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
