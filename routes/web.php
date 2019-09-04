@@ -42,3 +42,6 @@ Route::post('/users/register','UserController@store');
 Route::put('/users/update','UserController@update');
 Route::put('/users/update/update_condition','UserController@update_condition');
 
+
+Auth::routes();
+Route::get('/home', 'HomeController@index')->name('home');
