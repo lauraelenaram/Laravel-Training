@@ -71,8 +71,18 @@
     </header>
 
     <div class="app-body">
+
+        @if(Auth::check())
+            @if(Auth::user()->rol_id==1)
+                @include('template.sidebaradministrador')
+            @elseif(Auth::user()->rol_id==2)
+                @include('template.sidebarvendedor')
+            @elseif(Auth::user()->rol_id==3)
+                @include('template.sidebaralmacenero')
+            @else
+            @endif
+        @endif
         
-        @include('template.sidebar')
         <!-- Contenido Principal -->
         @yield('content')
         <!-- /Fin del contenido principal -->
