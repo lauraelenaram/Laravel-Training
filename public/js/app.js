@@ -1890,7 +1890,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      judgment: 'nombre',
+      judgment: 'name',
       search: '',
       arrayCategory: []
     };
@@ -1971,7 +1971,7 @@ __webpack_require__.r(__webpack_exports__);
         'description': this.description
       }).then(function (response) {
         me.closeModal();
-        me.listArticle(1, '', 'nombre');
+        me.listArticle(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -1992,7 +1992,7 @@ __webpack_require__.r(__webpack_exports__);
         'description': this.description
       }).then(function (response) {
         me.closeModal();
-        me.listArticle(1, '', 'nombre');
+        me.listArticle(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2020,7 +2020,7 @@ __webpack_require__.r(__webpack_exports__);
           axios.put('/articles/update/update_condition', {
             'id': id
           }).then(function (response) {
-            me.listArticle(1, '', 'nombre');
+            me.listArticle(1, '', 'name');
             swalWithBootstrapButtons.fire('¡Listo!', 'El estado de tu artículo ha sido cambiado.', 'success');
           })["catch"](function (error) {
             console.log(error);
@@ -2251,7 +2251,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      judgment: 'nombre',
+      judgment: 'name',
       search: ''
     };
   },
@@ -2314,7 +2314,7 @@ __webpack_require__.r(__webpack_exports__);
         'description': this.description
       }).then(function (response) {
         me.closeModal();
-        me.listCategory(1, '', 'nombre');
+        me.listCategory(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2331,7 +2331,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': this.idCategory
       }).then(function (response) {
         me.closeModal();
-        me.listCategory(1, '', 'nombre');
+        me.listCategory(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2359,7 +2359,7 @@ __webpack_require__.r(__webpack_exports__);
           axios.put('/categories/update/update_condition', {
             'id': id
           }).then(function (response) {
-            me.listCategory(1, '', 'nombre');
+            me.listCategory(1, '', 'name');
             swalWithBootstrapButtons.fire('¡Listo!', 'El estado de tu categoría ha sido cambiado.', 'success');
           })["catch"](function (error) {
             console.log(error);
@@ -2602,7 +2602,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      judgment: 'nombre',
+      judgment: 'name',
       search: ''
     };
   },
@@ -2669,7 +2669,7 @@ __webpack_require__.r(__webpack_exports__);
         'email': this.email
       }).then(function (response) {
         me.closeModal();
-        me.listClient(1, '', 'nombre');
+        me.listClient(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -2690,7 +2690,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': this.person_id
       }).then(function (response) {
         me.closeModal();
-        me.listClient(1, '', 'nombre');
+        me.listClient(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3116,7 +3116,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      judgment: 'nombre',
+      judgment: 'name',
       search: ''
     };
   },
@@ -3187,7 +3187,7 @@ __webpack_require__.r(__webpack_exports__);
         'contact_telephone': this.contact_telephone
       }).then(function (response) {
         me.closeModal();
-        me.listClient(1, '', 'nombre');
+        me.listClient(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -3210,7 +3210,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': this.person_id
       }).then(function (response) {
         me.closeModal();
-        me.listClient(1, '', 'nombre');
+        me.listClient(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -40747,11 +40747,9 @@ var render = function() {
                     }
                   },
                   [
-                    _c(
-                      "option",
-                      { attrs: { value: "name", selected: "selected" } },
-                      [_vm._v("Nombre")]
-                    ),
+                    _c("option", { attrs: { value: "name" } }, [
+                      _vm._v("Nombre")
+                    ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "document_number" } }, [
                       _vm._v("Número de documento")

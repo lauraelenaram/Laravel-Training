@@ -18,7 +18,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="judgment">
-                                      <option value="name" selected="selected">Nombre</option>
+                                      <option value="name">Nombre</option>
                                       <option value="document_number">Número de documento</option>
                                       <option value="email">Email</option>
                                       <option value="telephone">Teléfono</option>
@@ -174,7 +174,7 @@
                     'to': 0
                 },
                 offset: 3,
-                judgment: 'nombre',
+                judgment: 'name',
                 search: ''
             }
         },
@@ -251,7 +251,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','nombre');
+                    me.listClient(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -278,7 +278,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','nombre');
+                    me.listClient(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
