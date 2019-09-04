@@ -19,7 +19,11 @@ Route::group(['middleware' => ['guest']],function()
 
 Route::group(['middleware' => ['auth']],function()
 {
-    
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::get('/main', function () {
+        return view('content/content');
+    }) -> name('main');
 
     Route::group(['middleware' => ['Almacenero']],function()
     {
@@ -48,10 +52,6 @@ Route::group(['middleware' => ['auth']],function()
 
     Route::group(['middleware' => ['Administrador']],function()
     {
-        Route::get('/main', function () {
-            return view('content/content');
-        }) -> name('main');
-        
         Route::get('/clients','ClientController@index');
         Route::post('/clients/register','ClientController@store');
         Route::put('/clients/update','ClientController@update');
