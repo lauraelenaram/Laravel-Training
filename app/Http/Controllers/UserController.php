@@ -19,7 +19,7 @@ class UserController extends Controller
         if($search=='')
         {
             $people= User::join('people','users.id','=','people.id')
-            ->join('roles','users.id','=','roles.id')
+            ->join('roles','users.rol_id','=','roles.id')
             ->select('people.id','people.name','people.document_type','people.document_number',
             'people.address','people.telephone','people.email', 'users.user','users.password','users.condition',
             'users.rol_id','roles.name as rol')
@@ -28,7 +28,7 @@ class UserController extends Controller
         else
         {
             $people= User::join('people','users.id','=','people.id')
-            ->join('roles','users.id','=','roles.id')
+            ->join('roles','users.rol_id','=','roles.id')
             ->select('people.id','people.name','people.document_type','people.document_number',
             'people.address','people.telephone','people.email', 'users.user','users.password','users.condition',
             'users.rol_id','roles.name as rol')

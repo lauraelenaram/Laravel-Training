@@ -3499,7 +3499,7 @@ __webpack_require__.r(__webpack_exports__);
         'to': 0
       },
       offset: 3,
-      judgment: 'nombre',
+      judgment: 'name',
       search: ''
     };
   },
@@ -3540,6 +3540,7 @@ __webpack_require__.r(__webpack_exports__);
       var url = '/users?page=' + page + '&search=' + search + '&judgment=' + judgment;
       axios.get(url).then(function (response) {
         var response = response.data;
+        console.log(response);
         me.personArray = response.people.data;
         me.pagination = response.pagination;
       })["catch"](function (error) {
@@ -3579,9 +3580,9 @@ __webpack_require__.r(__webpack_exports__);
         'rol_id': this.rol_id
       }).then(function (response) {
         me.closeModal();
-        me.listPerson(1, '', 'nombre');
+        me.listPerson(1, '', 'name');
       })["catch"](function (error) {
-        console.log("AQUIIIIIIIII");
+        console.log(error);
       });
     },
     updatePerson: function updatePerson() {
@@ -3603,7 +3604,7 @@ __webpack_require__.r(__webpack_exports__);
         'id': this.person_id
       }).then(function (response) {
         me.closeModal();
-        me.listPerson(1, '', 'nombre');
+        me.listPerson(1, '', 'name');
       })["catch"](function (error) {
         console.log(error);
       });
@@ -42521,11 +42522,9 @@ var render = function() {
                     }
                   },
                   [
-                    _c(
-                      "option",
-                      { attrs: { value: "name", selected: "selected" } },
-                      [_vm._v("Nombre")]
-                    ),
+                    _c("option", { attrs: { value: "name" } }, [
+                      _vm._v("Nombre")
+                    ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "document_number" } }, [
                       _vm._v("Número de documento")

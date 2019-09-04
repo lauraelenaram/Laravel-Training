@@ -18,7 +18,7 @@
                             <div class="col-md-6">
                                 <div class="input-group">
                                     <select class="form-control col-md-3" v-model="judgment">
-                                      <option value="name" selected="selected">Nombre</option>
+                                      <option value="name">Nombre</option>
                                       <option value="document_number">Número de documento</option>
                                       <option value="email">Email</option>
                                       <option value="telephone">Teléfono</option>
@@ -204,7 +204,7 @@
                     'to': 0
                 },
                 offset: 3,
-                judgment: 'nombre',
+                judgment: 'name',
                 search: ''
             }
         },
@@ -248,6 +248,7 @@
                 var url= '/users?page=' + page + '&search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
+                    console.log(response);
                     me.personArray= response.people.data;
                     me.pagination= response.pagination;
                 })
@@ -296,10 +297,10 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listPerson(1,'','nombre');
+                    me.listPerson(1,'','name');
                 }).catch(function (error)
                 {
-                    console.log("AQUIIIIIIIII")
+                    console.log(error)
                 });
             },
             updatePerson()
@@ -326,7 +327,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listPerson(1,'','nombre');
+                    me.listPerson(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
