@@ -13,7 +13,7 @@
               <p class="text-muted">Control de acceso al sistema</p>
               <div class="form-group mb-3 {{$errors->has('user' ? 'is-invalid' : '')}}">
                 <span class="input-group-addon"><i class="icon-user"></i></span>
-                <input type="text" name="user" id="user" class="form-control" placeholder="Usuario">
+                <input type="text" value="{{old('user')}}" name="user" id="user" class="form-control" placeholder="Usuario">
                 {!!$errors->first('user','<span class="invalid-feedback"> :message </span>')!!}
               </div>
               <div class="form-group mb-4 {{$errors->has('password' ? 'is-invalid' : '')}}">
