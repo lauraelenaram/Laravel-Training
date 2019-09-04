@@ -147,7 +147,7 @@
                     'to': 0
                 },
                 offset: 3,
-                judgment: 'nombre',
+                judgment: 'name',
                 search: ''
             }
         },
@@ -220,7 +220,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listCategory(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -243,7 +243,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listCategory(1,'','nombre');
+                    me.listCategory(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -276,7 +276,7 @@
                             'id': id
                         }).then(function(response)
                         {
-                            me.listCategory(1,'','nombre');
+                            me.listCategory(1,'','name');
                             swalWithBootstrapButtons.fire(
                             '¡Listo!',
                             'El estado de tu categoría ha sido cambiado.',

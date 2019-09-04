@@ -8,7 +8,7 @@
                 <!-- Ejemplo de tabla Listado -->
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Clientes
+                        <i class="fa fa-align-justify"></i> Usuarios
                         <button type="button" @click="openModal('person','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
@@ -23,8 +23,8 @@
                                       <option value="email">Email</option>
                                       <option value="telephone">Teléfono</option>
                                     </select>
-                                    <input type="text" v-model="search" @keyup.enter="listClient(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
-                                    <button type="submit" @click="listClient(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    <input type="text" v-model="search" @keyup.enter="listPerson(1,search,judgment)" class="form-control" placeholder="Texto a buscar">
+                                    <button type="submit" @click="listPerson(1,search,judgment)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -38,6 +38,8 @@
                                     <th>Dirección</th>
                                     <th>Teléfono</th>
                                     <th>Email</th>
+                                    <th>Usuario</th>
+                                    <th>Rol</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -46,6 +48,12 @@
                                         <button type="button" class="btn btn-warning btn-sm" @click="openModal('person','update',person)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
+                                        <template>
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateUser(person.id)">
+                                                <i v-if="person.condition" class="icon-trash"></i>
+                                                <i v-else class="icon-check"></i>
+                                            </button>
+                                        </template>
                                     </td>
                                     <td v-text="person.name"></td>
                                     <td v-text="person.document_type"></td>
@@ -53,6 +61,8 @@
                                     <td v-text="person.address"></td>
                                     <td v-text="person.telephone"></td>
                                     <td v-text="person.email"></td>
+                                    <td v-text="person.user"></td>
+                                    <td v-text="person.rol"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -125,6 +135,28 @@
                                         <input type="email" v-model="email" class="form-control" placeholder="Email">
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Rol (*)</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" v-model="rol_id">
+                                            <option value="0">Seleccione un rol</option>
+                                            <option v-for="rol in rolArray" :key="rol.id" :value="rol.id"  v-text="rol.name"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Usuario (*)</label>
+                                    <div class="col-md-9">
+                                        <input type="text" v-model="user" class="form-control" placeholder="Nombre de usuario">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-md-3 form-control-label" for="email-input">Contraseña (*)</label>
+                                    <div class="col-md-9">
+                                        <input type="password" v-model="password" class="form-control" placeholder="Contraseña de acceso">
+                                    </div>
+                                </div>
+
                                 <div v-show="personError" class="form-group row div-error"> 
                                     <div class="text-center text-error">
                                         <div v-for="error in showPersonMsgError" :key="error" v-text="error">
@@ -158,7 +190,11 @@
                 address: '',
                 telephone: '',
                 email: '',
+                user: '',
+                password: '',
+                rol_id: 0,
                 personArray: [],
+                rolArray: [],
                 modal: 0,
                 modalTitle: '',
                 actionType: 0,
@@ -212,14 +248,27 @@
             }
         },
         methods: {
-            listClient(page, search, judgment) 
+            listPerson(page, search, judgment) 
             {
                 let me= this;
-                var url= '/clients?page=' + page + '&search=' + search + '&judgment=' + judgment;
+                var url= '/users?page=' + page + '&search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
+                    console.log(response);
                     me.personArray= response.people.data;
                     me.pagination= response.pagination;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            selectRol()
+            {
+                let me= this;
+                var url= '/roles/selectRol';
+                axios.get(url).then(function (response) {
+                    var response= response.data;
+                    me.rolArray= response.roles;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -229,7 +278,7 @@
             {
                 let me= this;
                 me.pagination.current_page= page;
-                me.listClient(page, search, judgment);
+                me.listPerson(page, search, judgment);
             },
             registerPerson()
             {
@@ -239,19 +288,22 @@
                 }
 
                 let me= this;
-
-                axios.post('/clients/register',
+                  
+                axios.post('/users/register',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
                     'document_number': this.document_number,
                     'address': this.address,
                     'telephone': this.telephone,
-                    'email': this.email
+                    'email': this.email,
+                    'user': this.user,
+                    'password': this.password,
+                    'rol_id': this.rol_id,
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','name');
+                    me.listPerson(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -266,7 +318,7 @@
 
                 let me= this;
 
-                axios.put('/clients/update',
+                axios.put('/users/update',
                 {
                     'name': this.name,
                     'document_type': this.document_type,
@@ -274,23 +326,77 @@
                     'address': this.address,
                     'telephone': this.telephone,
                     'email': this.email,
+                    'user': this.user,
+                    'password': this.password,
+                    'rol_id': this.rol_id,
                     'id': this.person_id
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','name');
+                    me.listPerson(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
-            },
+            },  
             validatePerson()
             {
                 this.personError=0;
                 this.showPersonMsgError=[];
+
                 if(!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
+                if(!this.user) this.showPersonMsgError.push("El nombre de usuario no puede estar vacío");
+                if(!this.password) this.showPersonMsgError.push("La contraseña no puede estar vacía");
+                if(this.rol_id==0) this.showPersonMsgError.push("Debes seleccionar un rol");
+
                 if(this.showPersonMsgError.length) this.personError=1;
                 return this.personError;
+            },
+            ActivateDesactivateUser(id)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+                })
+
+        
+                    swalWithBootstrapButtons.fire({
+                    title: '¿Estás seguro de cambiar el estado de  este usuario?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.value)
+                    {
+                        let me= this;
+                        axios.put('/users/update/update_condition',
+                        {
+                            'id': id
+                        }).then(function(response)
+                        {
+                            me.listPerson(1,'','name');
+                            swalWithBootstrapButtons.fire(
+                            '¡Listo!',
+                            'El estado del usuario ha sido cambiado.',
+                            'success'
+                            )
+                        }).catch(function (error)
+                        {
+                            console.log(error)
+                        });
+
+                    
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        
+                    }
+                    })
             },
             closeModal()
             {
@@ -301,11 +407,15 @@
                 this.document_number='';
                 this.address='';
                 this.telephone='';
-                this.personError=0;
                 this.email='';
+                this.user='';
+                this.password= '';
+                this.rol_id=0;
+                this.personError=0;
             },
             openModal(model, action, data=[])
             {
+                this.selectRol(); 
                 switch(model)
                 {
                     case "person":
@@ -315,28 +425,34 @@
                             case "register":
                             {
                                 this.modal=1;
-                                this.modalTitle='Registrar persona';
+                                this.modalTitle='Registrar usuario';
                                 this.name='';
                                 this.document_type='DNI';
                                 this.document_number='';
                                 this.address='';
                                 this.telephone='';
                                 this.email='';
+                                this.user='';
+                                this.password='';
+                                this.rol_id=0;
                                 this.actionType=1;
                                 break;
                             }
                             case "update":
                             {
-                                this.person_id=data['id'];
                                 this.modal=1;
-                                this.modalTitle="Actualizar cliente";
+                                this.modalTitle="Actualizar usuario";
                                 this.actionType=2;
+                                this.person_id=data['id'];
                                 this.name=data['name'];
                                 this.document_type= data['document_type'];
                                 this.document_number= data['document_number'];
                                 this.address= data['address'];
                                 this.telephone= data['telephone'];
                                 this.email= data['email'];
+                                this.user= data['user'];
+                                this.password= data['password'];
+                                this.rol_id= data['rol_id'];
                                 break;
                             }
                         }
@@ -345,7 +461,7 @@
             }
         },
         mounted() {
-            this.listClient(1, this.search, this.judgment);
+            this.listPerson(1, this.search, this.judgment);
         }
     }
 </script>

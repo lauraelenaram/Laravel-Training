@@ -191,7 +191,7 @@
                     'to': 0
                 },
                 offset: 3,
-                judgment: 'nombre',
+                judgment: 'name',
                 search: ''
             }
         },
@@ -271,7 +271,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','nombre');
+                    me.listClient(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -300,7 +300,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listClient(1,'','nombre');
+                    me.listClient(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)

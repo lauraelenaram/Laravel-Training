@@ -192,7 +192,7 @@
                     'to': 0
                 },
                 offset: 3,
-                judgment: 'nombre',
+                judgment: 'name',
                 search: '',
                 arrayCategory: []
             }
@@ -288,7 +288,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listArticle(1,'','nombre');
+                    me.listArticle(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -315,7 +315,7 @@
                 }).then(function(response)
                 {
                     me.closeModal();
-                    me.listArticle(1,'','nombre');
+                    me.listArticle(1,'','name');
                 }).catch(function (error)
                 {
                     console.log(error)
@@ -348,7 +348,7 @@
                             'id': id
                         }).then(function(response)
                         {
-                            me.listArticle(1,'','nombre');
+                            me.listArticle(1,'','name');
                             swalWithBootstrapButtons.fire(
                             '¡Listo!',
                             'El estado de tu artículo ha sido cambiado.',

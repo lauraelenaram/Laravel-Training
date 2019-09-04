@@ -29,11 +29,11 @@
         </template>
 
         <template v-if="menu==7">
-            <h1>Contenido del menu 7</h1>
+            <user-component></user-component>
         </template>
 
         <template v-if="menu==8">
-            <h1>Contenido del menu 8</h1>
+            <rol-component></rol-component>
         </template>
 
         <template v-if="menu==9">
