@@ -48,6 +48,12 @@
                                         <button type="button" class="btn btn-warning btn-sm" @click="openModal('person','update',person)"> 
                                           <i class="icon-pencil"></i>
                                         </button> &nbsp;
+                                        <template>
+                                            <button class="btn btn-danger btn-sm" type="button"  @click="ActivateDesactivateUser(person.id)">
+                                                <i v-if="person.condition" class="icon-trash"></i>
+                                                <i v-else class="icon-check"></i>
+                                            </button>
+                                        </template>
                                     </td>
                                     <td v-text="person.name"></td>
                                     <td v-text="person.document_type"></td>
@@ -345,6 +351,52 @@
 
                 if(this.showPersonMsgError.length) this.personError=1;
                 return this.personError;
+            },
+            ActivateDesactivateUser(id)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+                })
+
+        
+                    swalWithBootstrapButtons.fire({
+                    title: '¿Estás seguro de cambiar el estado de  este usuario?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.value)
+                    {
+                        let me= this;
+                        axios.put('/users/update/update_condition',
+                        {
+                            'id': id
+                        }).then(function(response)
+                        {
+                            me.listPerson(1,'','name');
+                            swalWithBootstrapButtons.fire(
+                            '¡Listo!',
+                            'El estado del usuario ha sido cambiado.',
+                            'success'
+                            )
+                        }).catch(function (error)
+                        {
+                            console.log(error)
+                        });
+
+                    
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        
+                    }
+                    })
             },
             closeModal()
             {

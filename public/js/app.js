@@ -3470,6 +3470,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -3618,6 +3624,37 @@ __webpack_require__.r(__webpack_exports__);
       if (this.rol_id == 0) this.showPersonMsgError.push("Debes seleccionar un rol");
       if (this.showPersonMsgError.length) this.personError = 1;
       return this.personError;
+    },
+    ActivateDesactivateUser: function ActivateDesactivateUser(id) {
+      var _this = this;
+
+      var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: '¿Estás seguro de cambiar el estado de  este usuario?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.value) {
+          var me = _this;
+          axios.put('/users/update/update_condition', {
+            'id': id
+          }).then(function (response) {
+            me.listPerson(1, '', 'name');
+            swalWithBootstrapButtons.fire('¡Listo!', 'El estado del usuario ha sido cambiado.', 'success');
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {}
+      });
     },
     closeModal: function closeModal() {
       this.modal = 0;
@@ -42596,22 +42633,45 @@ var render = function() {
                 "tbody",
                 _vm._l(_vm.personArray, function(person) {
                   return _c("tr", { key: person.id }, [
-                    _c("td", [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-warning btn-sm",
-                          attrs: { type: "button" },
-                          on: {
-                            click: function($event) {
-                              return _vm.openModal("person", "update", person)
+                    _c(
+                      "td",
+                      [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-warning btn-sm",
+                            attrs: { type: "button" },
+                            on: {
+                              click: function($event) {
+                                return _vm.openModal("person", "update", person)
+                              }
                             }
-                          }
-                        },
-                        [_c("i", { staticClass: "icon-pencil" })]
-                      ),
-                      _vm._v("  \n                                ")
-                    ]),
+                          },
+                          [_c("i", { staticClass: "icon-pencil" })]
+                        ),
+                        _vm._v("  \n                                    "),
+                        [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-danger btn-sm",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.ActivateDesactivateUser(person.id)
+                                }
+                              }
+                            },
+                            [
+                              person.condition
+                                ? _c("i", { staticClass: "icon-trash" })
+                                : _c("i", { staticClass: "icon-check" })
+                            ]
+                          )
+                        ]
+                      ],
+                      2
+                    ),
                     _vm._v(" "),
                     _c("td", {
                       domProps: { textContent: _vm._s(person.name) }
