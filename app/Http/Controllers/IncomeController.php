@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use App\Income;
+use App\Income_details;
 
 class IncomeController extends Controller
 {
@@ -53,21 +56,29 @@ class IncomeController extends Controller
         {
             DB::beginTransaction();
 
-            $people = new Person();
-            $people->fill($request->all());
-            $people->save();
-            
+            $mytime= Carbon::now('America/Mexico_City');
 
-            $user= new User();
-            $user->user = $request->user;
-            $user->password= bcrypt($request->password);
-            $user->condition = '1';
-            $user->rol_id = $request->rol_id;
-            $user->id = $people->id;
-            $user->save();
+            $incomes = new Income();
+            $incomes->fill($request->all());
+            $incomes->supplier_id= $request->supplier_id;
+            $incomes->user_id= \Auth::user()->id;
+            $incomes->date_hour= $mytime->toDateString();
+            $incomes->status= 'Registrado';
+            $incomes->save();
+
+            $details= $request->data;
+
+            foreach($details as $ep=>$det)
+            {
+                $details= new Income_details();
+                $details->income_id= $incomes->id;
+                $details->article_id= $det['article_id'];
+                $details->quantity= $det['quantity'];
+                $details->price= $det['price'];
+                $details->save();
+            }
 
             DB::commit();  
-            return $user;
         }
         catch (Exception $e)
         {
@@ -76,40 +87,13 @@ class IncomeController extends Controller
        
     }
 
-    public function update(Request $request)
+    public function desactivate(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        try
-        {
-            DB::beginTransaction();
-            $user= User::findOrFail($request->id);
-            $people= Person::findOrFail($user->id);
+        $incomes= Income::findOrFail($request->id);
+        $incomes->status = 'Anulado';
+        $incomes->save();
 
-            $people->fill($request->all());
-            $people->save();
-
-            $user->user= $request->user;
-            $user->password= bcrypt($request->password);
-            $user->condition= '1';
-            $user->rol_id= $request->rol_id;
-            $user->save();
-
-            DB::commit(); 
-            return $user;
-       }
-        catch (Exception $e)
-        {
-            DB::rollBack();
-        }
-    }
-
-    public function update_condition(Request $request)
-    {
-        if(!$request->ajax()) return redirect('/');
-        $user= User::findOrFail($request->id);
-        $user->condition = ($user->condition) ? false : true;
-        $user->save();
-
-        return $user;
+        return $incomes;
     }
 }

@@ -41,6 +41,10 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');
         Route::put('/suppliers/update','SupplierController@update');
+
+        Route::get('/incomes','IncomeController@index');
+        Route::post('/incomes/register','IncomeController@store');
+        Route::put('/incomes/desactivate','IncomeController@desactivate');
     });
 
     Route::group(['middleware' => ['Vendedor']],function()
@@ -78,6 +82,10 @@ Route::group(['middleware' => ['auth']],function()
         Route::post('/users/register','UserController@store');
         Route::put('/users/update','UserController@update');
         Route::put('/users/update/update_condition','UserController@update_condition');
+
+        Route::get('/incomes','IncomeController@index');
+        Route::post('/incomes/register','IncomeController@store');
+        Route::put('/incomes/desactivate','IncomeController@desactivate');
     });
     
 });
