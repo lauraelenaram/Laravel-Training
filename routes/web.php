@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');
         Route::put('/suppliers/update','SupplierController@update');
+        Route::get('/suppliers/selectSupplier','SupplierController@selectSupplier');
 
         Route::get('/incomes','IncomeController@index');
         Route::post('/incomes/register','IncomeController@store');
@@ -74,6 +75,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');
         Route::put('/suppliers/update','SupplierController@update');
+        Route::get('/suppliers/selectSupplier','SupplierController@selectSupplier');
 
         Route::get('/roles','RolController@index');
         Route::get('/roles/selectRol','RolController@selectRol');
