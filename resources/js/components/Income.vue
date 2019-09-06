@@ -94,11 +94,11 @@
                                     <div class="form-group">
                                         <label for="">Proveedor(*)</label>
                                         <v-select
-                                            :on-search= "selectSupplier"
+                                            :on-search="selectSupplier"
                                             label="name"
-                                            :options= "supplierArray"
+                                            :options="supplierArray"
                                             placeholder="Buscar proveedores..."
-                                            v-on:change="getSupplierData"
+                                            :onChange="getSupplierData"
                                         >
                                         </v-select>
                                     </div>
@@ -128,6 +128,15 @@
                                     <div class="form-group">
                                         <label for="">Número de comprobante(*)</label>
                                         <input type="text" class="form-control" v-model="voucher_number" placeholder="000xx">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div v-show="incomeError" class="form-group row div-error"> 
+                                        <div class="text-center text-error">
+                                            <div v-for="error in showIncomeMsgError" :key="error" v-text="error">
+
+                                            </div> 
+                                        </div> 
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +236,7 @@
                             <div class="form-group row">
                                 <div class="col-md-12">
                                     <button class="btn btn-secondary" @click="closeDetail()">Cerrar</button>
-                                    <button class="btn btn-primary" @click="incomeRegister()">Registrar comprar</button>
+                                    <button class="btn btn-primary" @click="registerIncome()">Registrar comprar</button>
                                 </div>
                             </div>
                         </div>
@@ -434,11 +443,11 @@
                     console.log(error);
                 });
             },
-            getSupplierData(opt)
+            getSupplierData(val1)
             {
                 let me= this;
                 me.loading= true;
-                me.supplier_id= opt.id;
+                me.supplier_id= val1.id;
             },
             searchArticle()
             {
@@ -554,51 +563,73 @@
                     console.log(error);
                 });
             },
-            registerPerson()
+            registerIncome()
             {
-                if(this.validatePerson())
+                if(this.validateIncome())
                 {
                     return;
                 }
 
                 let me= this;
                   
-                axios.post('/users/register',
+                axios.post('/incomes/register',
                 {
-                    'name': this.name,
-                    'document_type': this.document_type,
-                    'document_number': this.document_number,
-                    'address': this.address,
-                    'telephone': this.telephone,
-                    'email': this.email,
-                    'user': this.user,
-                    'password': this.password,
-                    'rol_id': this.rol_id,
+                    'supplier_id': this.supplier_id,
+                    'voucher_type': this.voucher_type,
+                    'voucher_serie': this.voucher_serie,
+                    'voucher_number': this.voucher_number,
+                    'tax': this.tax,
+                    'total': this.total,
+                    'data': this.detailArray
                 }).then(function(response)
                 {
-                    me.closeModal();
-                    me.listPerson(1,'','name');
+                    me.list=1;
+                    me.listIncome(1,'','voucher_number');
+                    me.supplier_id=0;
+                    me.voucher_type='boleta';
+                    me.voucher_number= '';
+                    me.voucher_serie= '';
+                    me.tax=0.16;
+                    me.total=0;
+                    me.article_id=0;
+                    me.article='';
+                    me.quantity=0;
+                    me.price=0;
+                    me.detailArray= [];
                 }).catch(function (error)
                 {
                     console.log(error)
                 });
             }, 
-            validatePerson()
+            validateIncome()
             {
-                this.personError=0;
-                this.showPersonMsgError=[];
+                this.incomeError=0;
+                this.showIncomeMsgError=[];
+                
+                if(this.supplier_id==0) this.showIncomeMsgError.push('Seleccione un proveedor');
+                if(this.voucher_type==0) this.showIncomeMsgError.push('Seleccione el comprobante');
+                if(!this.voucher_number) this.showIncomeMsgError.push('Ingrese el número de comprobante'); 
+                if(!this.tax) this.showIncomeMsgError.push('Ingrese el impuesto de compra'); 
+                if(this.detailArray.length<=0) this.showIncomeMsgError.push('Ingrese detalles')
 
-                if(!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
-                if(!this.user) this.showPersonMsgError.push("El nombre de usuario no puede estar vacío");
-                if(!this.password) this.showPersonMsgError.push("La contraseña no puede estar vacía");
-                if(this.rol_id==0) this.showPersonMsgError.push("Debes seleccionar un rol");
-
-                if(this.showPersonMsgError.length) this.personError=1;
-                return this.personError;
+                if(this.showIncomeMsgError.length) this.incomeError=1;
+                return this.incomeError;
             },
             showDetail()
             {
-                this.list=0;
+                let me=this;
+                me.list=0;
+                me.supplier_id=0;
+                me.voucher_type='boleta';
+                me.voucher_number= '';
+                me.voucher_serie= '';
+                me.tax=0.16;
+                me.total=0;
+                me.article_id=0;
+                me.article='';
+                me.quantity=0;
+                me.price=0;
+                me.detailArray= [];
             },
             closeDetail()
             {

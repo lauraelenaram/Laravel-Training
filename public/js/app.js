@@ -3085,6 +3085,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3199,10 +3208,10 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    getSupplierData: function getSupplierData(opt) {
+    getSupplierData: function getSupplierData(val1) {
       var me = this;
       me.loading = true;
-      me.supplier_id = opt.id;
+      me.supplier_id = val1.id;
     },
     searchArticle: function searchArticle() {
       var me = this;
@@ -3296,41 +3305,63 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    registerPerson: function registerPerson() {
-      if (this.validatePerson()) {
+    registerIncome: function registerIncome() {
+      if (this.validateIncome()) {
         return;
       }
 
       var me = this;
-      axios.post('/users/register', {
-        'name': this.name,
-        'document_type': this.document_type,
-        'document_number': this.document_number,
-        'address': this.address,
-        'telephone': this.telephone,
-        'email': this.email,
-        'user': this.user,
-        'password': this.password,
-        'rol_id': this.rol_id
+      axios.post('/incomes/register', {
+        'supplier_id': this.supplier_id,
+        'voucher_type': this.voucher_type,
+        'voucher_serie': this.voucher_serie,
+        'voucher_number': this.voucher_number,
+        'tax': this.tax,
+        'total': this.total,
+        'data': this.detailArray
       }).then(function (response) {
-        me.closeModal();
-        me.listPerson(1, '', 'name');
+        me.list = 1;
+        me.listIncome(1, '', 'voucher_number');
+        me.supplier_id = 0;
+        me.voucher_type = 'boleta';
+        me.voucher_number = '';
+        me.voucher_serie = '';
+        me.tax = 0.16;
+        me.total = 0;
+        me.article_id = 0;
+        me.article = '';
+        me.quantity = 0;
+        me.price = 0;
+        me.detailArray = [];
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    validatePerson: function validatePerson() {
-      this.personError = 0;
-      this.showPersonMsgError = [];
-      if (!this.name) this.showPersonMsgError.push("El nombre de la persona no puede estar vacío");
-      if (!this.user) this.showPersonMsgError.push("El nombre de usuario no puede estar vacío");
-      if (!this.password) this.showPersonMsgError.push("La contraseña no puede estar vacía");
-      if (this.rol_id == 0) this.showPersonMsgError.push("Debes seleccionar un rol");
-      if (this.showPersonMsgError.length) this.personError = 1;
-      return this.personError;
+    validateIncome: function validateIncome() {
+      this.incomeError = 0;
+      this.showIncomeMsgError = [];
+      if (this.supplier_id == 0) this.showIncomeMsgError.push('Seleccione un proveedor');
+      if (this.voucher_type == 0) this.showIncomeMsgError.push('Seleccione el comprobante');
+      if (!this.voucher_number) this.showIncomeMsgError.push('Ingrese el número de comprobante');
+      if (!this.tax) this.showIncomeMsgError.push('Ingrese el impuesto de compra');
+      if (this.detailArray.length <= 0) this.showIncomeMsgError.push('Ingrese detalles');
+      if (this.showIncomeMsgError.length) this.incomeError = 1;
+      return this.incomeError;
     },
     showDetail: function showDetail() {
-      this.list = 0;
+      var me = this;
+      me.list = 0;
+      me.supplier_id = 0;
+      me.voucher_type = 'boleta';
+      me.voucher_number = '';
+      me.voucher_serie = '';
+      me.tax = 0.16;
+      me.total = 0;
+      me.article_id = 0;
+      me.article = '';
+      me.quantity = 0;
+      me.price = 0;
+      me.detailArray = [];
     },
     closeDetail: function closeDetail() {
       this.list = 1;
@@ -42431,9 +42462,9 @@ var render = function() {
                               "on-search": _vm.selectSupplier,
                               label: "name",
                               options: _vm.supplierArray,
-                              placeholder: "Buscar proveedores..."
-                            },
-                            on: { change: _vm.getSupplierData }
+                              placeholder: "Buscar proveedores...",
+                              onChange: _vm.getSupplierData
+                            }
                           })
                         ],
                         1
@@ -42581,6 +42612,36 @@ var render = function() {
                           }
                         })
                       ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "col-md-12" }, [
+                      _c(
+                        "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.incomeError,
+                              expression: "incomeError"
+                            }
+                          ],
+                          staticClass: "form-group row div-error"
+                        },
+                        [
+                          _c(
+                            "div",
+                            { staticClass: "text-center text-error" },
+                            _vm._l(_vm.showIncomeMsgError, function(error) {
+                              return _c("div", {
+                                key: error,
+                                domProps: { textContent: _vm._s(error) }
+                              })
+                            }),
+                            0
+                          )
+                        ]
+                      )
                     ])
                   ]),
                   _vm._v(" "),
@@ -43015,7 +43076,7 @@ var render = function() {
                           staticClass: "btn btn-primary",
                           on: {
                             click: function($event) {
-                              return _vm.incomeRegister()
+                              return _vm.registerIncome()
                             }
                           }
                         },
