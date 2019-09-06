@@ -203,15 +203,15 @@
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
                                                 <td colspan="4" align="right"><strong>Total parcial:</strong></td>
-                                                <td>$5</td>
+                                                <td>$ {{parcialTotal= (total-taxTotal).toFixed(2)}} </td>
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
                                                 <td colspan="4" align="right"><strong>Total impuesto:</strong></td>
-                                                <td>$1</td>
+                                                <td>$ {{taxTotal= ((total*tax) / (1+tax)).toFixed(2) }} </td>
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
                                                 <td colspan="4" align="right"><strong>Total neto:</strong></td>
-                                                <td>$6</td>
+                                                <td> ${{total=calculateTotal}} </td>
                                             </tr>
                                         </tbody>
                                         <tbody v-else>
@@ -279,6 +279,8 @@
                 voucher_serie:'',
                 tax: 0.16,
                 total: 0.0,
+                taxTotal: 0.0,
+                parcialTotal: 0.0,
                 incomeArray: [],
                 detailArray: [],
                 supplierArray: [],
@@ -340,6 +342,15 @@
                     from++;
                 }
                 return pagesArray;
+            },
+            calculateTotal: function()
+            {
+                var result=0;
+                for(var i=0; i<this.detailArray.length; i++)
+                {
+                    result= result + (this.detailArray[i].price * this.detailArray[i].quantity)
+                }
+                return result;
             }
         },
         methods: {

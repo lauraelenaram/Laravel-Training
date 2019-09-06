@@ -3051,6 +3051,8 @@ __webpack_require__.r(__webpack_exports__);
       voucher_serie: '',
       tax: 0.16,
       total: 0.0,
+      taxTotal: 0.0,
+      parcialTotal: 0.0,
       incomeArray: [],
       detailArray: [],
       supplierArray: [],
@@ -3108,6 +3110,15 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return pagesArray;
+    },
+    calculateTotal: function calculateTotal() {
+      var result = 0;
+
+      for (var i = 0; i < this.detailArray.length; i++) {
+        result = result + this.detailArray[i].price * this.detailArray[i].quantity;
+      }
+
+      return result;
     }
   },
   methods: {
@@ -42922,11 +42933,76 @@ var render = function() {
                                     ])
                                   }),
                                   _vm._v(" "),
-                                  _vm._m(3),
+                                  _c(
+                                    "tr",
+                                    {
+                                      staticStyle: {
+                                        "background-color": "#CEECF5"
+                                      }
+                                    },
+                                    [
+                                      _vm._m(3),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$ " +
+                                            _vm._s(
+                                              (_vm.parcialTotal = (
+                                                _vm.total - _vm.taxTotal
+                                              ).toFixed(2))
+                                            ) +
+                                            " "
+                                        )
+                                      ])
+                                    ]
+                                  ),
                                   _vm._v(" "),
-                                  _vm._m(4),
+                                  _c(
+                                    "tr",
+                                    {
+                                      staticStyle: {
+                                        "background-color": "#CEECF5"
+                                      }
+                                    },
+                                    [
+                                      _vm._m(4),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "$ " +
+                                            _vm._s(
+                                              (_vm.taxTotal = (
+                                                (_vm.total * _vm.tax) /
+                                                (1 + _vm.tax)
+                                              ).toFixed(2))
+                                            ) +
+                                            " "
+                                        )
+                                      ])
+                                    ]
+                                  ),
                                   _vm._v(" "),
-                                  _vm._m(5)
+                                  _c(
+                                    "tr",
+                                    {
+                                      staticStyle: {
+                                        "background-color": "#CEECF5"
+                                      }
+                                    },
+                                    [
+                                      _vm._m(5),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          " $" +
+                                            _vm._s(
+                                              (_vm.total = _vm.calculateTotal)
+                                            ) +
+                                            " "
+                                        )
+                                      ])
+                                    ]
+                                  )
                                 ],
                                 2
                               )
@@ -43137,36 +43213,24 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-      _c("td", { attrs: { colspan: "4", align: "right" } }, [
-        _c("strong", [_vm._v("Total parcial:")])
-      ]),
-      _vm._v(" "),
-      _c("td", [_vm._v("$5")])
+    return _c("td", { attrs: { colspan: "4", align: "right" } }, [
+      _c("strong", [_vm._v("Total parcial:")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-      _c("td", { attrs: { colspan: "4", align: "right" } }, [
-        _c("strong", [_vm._v("Total impuesto:")])
-      ]),
-      _vm._v(" "),
-      _c("td", [_vm._v("$1")])
+    return _c("td", { attrs: { colspan: "4", align: "right" } }, [
+      _c("strong", [_vm._v("Total impuesto:")])
     ])
   },
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-      _c("td", { attrs: { colspan: "4", align: "right" } }, [
-        _c("strong", [_vm._v("Total neto:")])
-      ]),
-      _vm._v(" "),
-      _c("td", [_vm._v("$6")])
+    return _c("td", { attrs: { colspan: "4", align: "right" } }, [
+      _c("strong", [_vm._v("Total neto:")])
     ])
   },
   function() {
