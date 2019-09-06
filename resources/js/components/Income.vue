@@ -276,7 +276,7 @@
                                     <tbody>
                                         <tr v-for="article in articleArray" :key="article.id"> 
                                             <td>
-                                                <button type="button" class="btn btn-success btn-sm" @click="addDetailModal(article)"> 
+                                                <button type="button" class="btn btn-success btn-sm " @click="addDetailModal(article)"> 
                                                     <i class="icon-check"></i>
                                                 </button>
                                             </td>
@@ -523,7 +523,24 @@
             },
             addDetailModal(data= [])
             {
-
+                let me=this;
+                if(me.findArticle(data['id']))
+                    {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Error...',
+                            text: 'Este artículo ya se encuentra agregado',
+                        }) 
+                    }
+                    else
+                    {
+                        me.detailArray.push({
+                            article_id: data['id'],
+                            article: data['name'],
+                            quantity: 1,
+                            price: 1
+                        });
+                    } 
             },
             listArticle(search, judgment) 
             {
@@ -593,6 +610,7 @@
             },
             openModal()
             {
+                this.articleArray=[];
                 this.modal=1;
                 this.modalTitle='Seleccione uno o varios artículos';
             }

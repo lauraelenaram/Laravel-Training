@@ -3269,6 +3269,22 @@ __webpack_require__.r(__webpack_exports__);
     },
     addDetailModal: function addDetailModal() {
       var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+      var me = this;
+
+      if (me.findArticle(data['id'])) {
+        Swal.fire({
+          type: 'error',
+          title: 'Error...',
+          text: 'Este artículo ya se encuentra agregado'
+        });
+      } else {
+        me.detailArray.push({
+          article_id: data['id'],
+          article: data['name'],
+          quantity: 1,
+          price: 1
+        });
+      }
     },
     listArticle: function listArticle(search, judgment) {
       var me = this;
@@ -3323,6 +3339,7 @@ __webpack_require__.r(__webpack_exports__);
       this.modal = 0;
     },
     openModal: function openModal() {
+      this.articleArray = [];
       this.modal = 1;
       this.modalTitle = 'Seleccione uno o varios artículos';
     }
@@ -43183,7 +43200,7 @@ var render = function() {
                               _c(
                                 "button",
                                 {
-                                  staticClass: "btn btn-success btn-sm",
+                                  staticClass: "btn btn-success btn-sm ",
                                   attrs: { type: "button" },
                                   on: {
                                     click: function($event) {
