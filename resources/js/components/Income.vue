@@ -134,7 +134,10 @@
                             <div class="form-group row border">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label for="">Artículo</label>
+                                        <label for="">
+                                            Artículo
+                                            <span style="color:red;" v-show="article_id==0">(*Seleccione)</span>
+                                        </label>
                                         <div class="form-inline">
                                             <input type="text" class="form-control" v-model="code" @keyup.enter="searchArticle()" placeholder="Ingrese artículo">
                                             <button class="btn btn-primary">...</button>
@@ -144,13 +147,19 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="">Precio</label>
+                                        <label for="">
+                                            Precio
+                                            <span style="color:red;" v-show="price==0">(*Ingrese precio)</span>
+                                        </label>
                                         <input type="number" step="any" class="form-control" v-model="price" value="0">
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
-                                        <label for="">Cantidad</label>
+                                        <label for="">
+                                            Cantidad
+                                            <span style="color:red;" v-show="quantity==0">(*Ingrese)</span>
+                                        </label>
                                         <input type="number" step="any" class="form-control" v-model="quantity" value="0">
                                     </div>
                                 </div>
@@ -401,15 +410,49 @@
                 me.pagination.current_page= page;
                 me.listIncome(page, search, judgment);
             },
+            findArticle(id)
+            {
+                var sw=0;
+                for(var i=0; i<this.detailArray.length; i++)
+                {
+                    if(this.detailArray[i].article_id==id)
+                    {
+                        sw= true;
+                    }
+                }
+                return sw;
+            },
             addDetail()
             {
                 let me= this;
-                me.detailArray.push({
-                    article_id: me.article_id,
-                    article: me.article,
-                    quantity: me.quantity,
-                    price: me.price
-                });
+
+                if(me.article_id==0 || me.quantity==0 || me.price==0)
+                {}
+                else
+                {
+                    if(me.findArticle(me.article_id))
+                    {
+                        Swal.fire({
+                            type: 'error',
+                            title: 'Error...',
+                            text: 'Este artículo ya se encuentra agregado',
+                        }) 
+                    }
+                    else
+                    {
+                        me.detailArray.push({
+                            article_id: me.article_id,
+                            article: me.article,
+                            quantity: me.quantity,
+                            price: me.price
+                        });
+                        me.code='';
+                        me.article_id=0;
+                        me.article='';
+                        me.quantity=0;
+                        me.price=0;
+                    } 
+                }
             },
             registerPerson()
             {

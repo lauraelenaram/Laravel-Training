@@ -3027,6 +3027,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3156,14 +3165,41 @@ __webpack_require__.r(__webpack_exports__);
       me.pagination.current_page = page;
       me.listIncome(page, search, judgment);
     },
+    findArticle: function findArticle(id) {
+      var sw = 0;
+
+      for (var i = 0; i < this.detailArray.length; i++) {
+        if (this.detailArray[i].article_id == id) {
+          sw = true;
+        }
+      }
+
+      return sw;
+    },
     addDetail: function addDetail() {
       var me = this;
-      me.detailArray.push({
-        article_id: me.article_id,
-        article: me.article,
-        quantity: me.quantity,
-        price: me.price
-      });
+
+      if (me.article_id == 0 || me.quantity == 0 || me.price == 0) {} else {
+        if (me.findArticle(me.article_id)) {
+          Swal.fire({
+            type: 'error',
+            title: 'Error...',
+            text: 'Este artículo ya se encuentra agregado'
+          });
+        } else {
+          me.detailArray.push({
+            article_id: me.article_id,
+            article: me.article,
+            quantity: me.quantity,
+            price: me.price
+          });
+          me.code = '';
+          me.article_id = 0;
+          me.article = '';
+          me.quantity = 0;
+          me.price = 0;
+        }
+      }
     },
     registerPerson: function registerPerson() {
       if (this.validatePerson()) {
@@ -42564,7 +42600,24 @@ var render = function() {
                     _c("div", { staticClass: "col-md-6" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Artículo")
+                          _vm._v(
+                            "\n                                        Artículo\n                                        "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.article_id == 0,
+                                  expression: "article_id==0"
+                                }
+                              ],
+                              staticStyle: { color: "red" }
+                            },
+                            [_vm._v("(*Seleccione)")]
+                          )
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "form-inline" }, [
@@ -42639,7 +42692,26 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-2" }, [
                       _c("div", { staticClass: "form-group" }, [
-                        _c("label", { attrs: { for: "" } }, [_vm._v("Precio")]),
+                        _c("label", { attrs: { for: "" } }, [
+                          _vm._v(
+                            "\n                                        Precio\n                                        "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.price == 0,
+                                  expression: "price==0"
+                                }
+                              ],
+                              staticStyle: { color: "red" }
+                            },
+                            [_vm._v("(*Ingrese precio)")]
+                          )
+                        ]),
                         _vm._v(" "),
                         _c("input", {
                           directives: [
@@ -42668,7 +42740,24 @@ var render = function() {
                     _c("div", { staticClass: "col-md-2" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Cantidad")
+                          _vm._v(
+                            "\n                                        Cantidad\n                                        "
+                          ),
+                          _c(
+                            "span",
+                            {
+                              directives: [
+                                {
+                                  name: "show",
+                                  rawName: "v-show",
+                                  value: _vm.quantity == 0,
+                                  expression: "quantity==0"
+                                }
+                              ],
+                              staticStyle: { color: "red" }
+                            },
+                            [_vm._v("(*Ingrese)")]
+                          )
                         ]),
                         _vm._v(" "),
                         _c("input", {
