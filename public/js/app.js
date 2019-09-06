@@ -3036,6 +3036,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3073,6 +3122,8 @@ __webpack_require__.r(__webpack_exports__);
       offset: 3,
       judgment: 'voucher_number',
       search: '',
+      judgmentA: 'name',
+      searchA: '',
       articleArray: [],
       code: '',
       article: ''
@@ -3216,6 +3267,19 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
+    addDetailModal: function addDetailModal() {
+      var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+    },
+    listArticle: function listArticle(search, judgment) {
+      var me = this;
+      var url = '/articles/listArticle?search=' + search + '&judgment=' + judgment;
+      axios.get(url).then(function (response) {
+        var response = response.data;
+        me.articleArray = response.articles.data;
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
     registerPerson: function registerPerson() {
       if (this.validatePerson()) {
         return;
@@ -3239,30 +3303,6 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    updatePerson: function updatePerson() {
-      if (this.validatePerson()) {
-        return;
-      }
-
-      var me = this;
-      axios.put('/users/update', {
-        'name': this.name,
-        'document_type': this.document_type,
-        'document_number': this.document_number,
-        'address': this.address,
-        'telephone': this.telephone,
-        'email': this.email,
-        'user': this.user,
-        'password': this.password,
-        'rol_id': this.rol_id,
-        'id': this.person_id
-      }).then(function (response) {
-        me.closeModal();
-        me.listPerson(1, '', 'name');
-      })["catch"](function (error) {
-        console.log(error);
-      });
-    },
     validatePerson: function validatePerson() {
       this.personError = 0;
       this.showPersonMsgError = [];
@@ -3273,37 +3313,6 @@ __webpack_require__.r(__webpack_exports__);
       if (this.showPersonMsgError.length) this.personError = 1;
       return this.personError;
     },
-    ActivateDesactivateUser: function ActivateDesactivateUser(id) {
-      var _this = this;
-
-      var swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      });
-      swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de cambiar el estado de  este usuario?',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Aceptar',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.value) {
-          var me = _this;
-          axios.put('/users/update/update_condition', {
-            'id': id
-          }).then(function (response) {
-            me.listPerson(1, '', 'name');
-            swalWithBootstrapButtons.fire('¡Listo!', 'El estado del usuario ha sido cambiado.', 'success');
-          })["catch"](function (error) {
-            console.log(error);
-          });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {}
-      });
-    },
     showDetail: function showDetail() {
       this.list = 0;
     },
@@ -3312,63 +3321,10 @@ __webpack_require__.r(__webpack_exports__);
     },
     closeModal: function closeModal() {
       this.modal = 0;
-      this.modalTitle = '';
-      this.name = '';
-      this.document_type = 'DNI';
-      this.document_number = '';
-      this.address = '';
-      this.telephone = '';
-      this.email = '';
-      this.user = '';
-      this.password = '';
-      this.rol_id = 0;
-      this.personError = 0;
     },
-    openModal: function openModal(model, action) {
-      var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-      this.selectRol();
-
-      switch (model) {
-        case "person":
-          {
-            switch (action) {
-              case "register":
-                {
-                  this.modal = 1;
-                  this.modalTitle = 'Registrar usuario';
-                  this.name = '';
-                  this.document_type = 'DNI';
-                  this.document_number = '';
-                  this.address = '';
-                  this.telephone = '';
-                  this.email = '';
-                  this.user = '';
-                  this.password = '';
-                  this.rol_id = 0;
-                  this.actionType = 1;
-                  break;
-                }
-
-              case "update":
-                {
-                  this.modal = 1;
-                  this.modalTitle = "Actualizar usuario";
-                  this.actionType = 2;
-                  this.person_id = data['id'];
-                  this.name = data['name'];
-                  this.document_type = data['document_type'];
-                  this.document_number = data['document_number'];
-                  this.address = data['address'];
-                  this.telephone = data['telephone'];
-                  this.email = data['email'];
-                  this.user = data['user'];
-                  this.password = data['password'];
-                  this.rol_id = data['rol_id'];
-                  break;
-                }
-            }
-          }
-      }
+    openModal: function openModal() {
+      this.modal = 1;
+      this.modalTitle = 'Seleccione uno o varios artículos';
     }
   },
   mounted: function mounted() {
@@ -42676,9 +42632,18 @@ var render = function() {
                             }
                           }),
                           _vm._v(" "),
-                          _c("button", { staticClass: "btn btn-primary" }, [
-                            _vm._v("...")
-                          ]),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary",
+                              on: {
+                                click: function($event) {
+                                  return _vm.openModal()
+                                }
+                              }
+                            },
+                            [_vm._v("...")]
+                          ),
                           _vm._v(" "),
                           _c("input", {
                             directives: [
@@ -43095,7 +43060,190 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _c("div", { staticClass: "modal-body" }),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "form-group row" }, [
+                  _c("div", { staticClass: "col-md-6" }, [
+                    _c("div", { staticClass: "input-group" }, [
+                      _c(
+                        "select",
+                        {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.judgmentA,
+                              expression: "judgmentA"
+                            }
+                          ],
+                          staticClass: "form-control col-md-3",
+                          on: {
+                            change: function($event) {
+                              var $$selectedVal = Array.prototype.filter
+                                .call($event.target.options, function(o) {
+                                  return o.selected
+                                })
+                                .map(function(o) {
+                                  var val = "_value" in o ? o._value : o.value
+                                  return val
+                                })
+                              _vm.judgmentA = $event.target.multiple
+                                ? $$selectedVal
+                                : $$selectedVal[0]
+                            }
+                          }
+                        },
+                        [
+                          _c(
+                            "option",
+                            { attrs: { value: "name", selected: "selected" } },
+                            [_vm._v("Nombre")]
+                          ),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "description" } }, [
+                            _vm._v("Descripción")
+                          ]),
+                          _vm._v(" "),
+                          _c("option", { attrs: { value: "code" } }, [
+                            _vm._v("Código")
+                          ])
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.searchA,
+                            expression: "searchA"
+                          }
+                        ],
+                        staticClass: "form-control",
+                        attrs: { type: "text", placeholder: "Texto a buscar" },
+                        domProps: { value: _vm.searchA },
+                        on: {
+                          keyup: function($event) {
+                            if (
+                              !$event.type.indexOf("key") &&
+                              _vm._k(
+                                $event.keyCode,
+                                "enter",
+                                13,
+                                $event.key,
+                                "Enter"
+                              )
+                            ) {
+                              return null
+                            }
+                            return _vm.listArticle(_vm.searchA, _vm.judgmentA)
+                          },
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.searchA = $event.target.value
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-primary",
+                          attrs: { type: "submit" },
+                          on: {
+                            click: function($event) {
+                              return _vm.listArticle(_vm.searchA, _vm.judgmentA)
+                            }
+                          }
+                        },
+                        [
+                          _c("i", { staticClass: "fa fa-search" }),
+                          _vm._v(" Buscar")
+                        ]
+                      )
+                    ])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "table-response" }, [
+                  _c(
+                    "table",
+                    {
+                      staticClass: "table table-bordered table-striped table-sm"
+                    },
+                    [
+                      _vm._m(7),
+                      _vm._v(" "),
+                      _c(
+                        "tbody",
+                        _vm._l(_vm.articleArray, function(article) {
+                          return _c("tr", { key: article.id }, [
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-success btn-sm",
+                                  attrs: { type: "button" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.addDetailModal(article)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "icon-check" })]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", {
+                              domProps: { textContent: _vm._s(article.code) }
+                            }),
+                            _vm._v(" "),
+                            _c("td", {
+                              domProps: { textContent: _vm._s(article.name) }
+                            }),
+                            _vm._v(" "),
+                            _c("td", {
+                              domProps: {
+                                textContent: _vm._s(article.category_name)
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("td", {
+                              domProps: {
+                                textContent: _vm._s(article.sale_price)
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("td", {
+                              domProps: { textContent: _vm._s(article.stock) }
+                            }),
+                            _vm._v(" "),
+                            _c("td", [
+                              article.condition
+                                ? _c("div", [
+                                    _c(
+                                      "span",
+                                      { staticClass: "badge badge-success" },
+                                      [_vm._v("Activo")]
+                                    )
+                                  ])
+                                : _c("div", [
+                                    _c(
+                                      "span",
+                                      { staticClass: "badge badge-danger" },
+                                      [_vm._v("Desactivado")]
+                                    )
+                                  ])
+                            ])
+                          ])
+                        }),
+                        0
+                      )
+                    ]
+                  )
+                ])
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
                 _c(
@@ -43242,6 +43390,28 @@ var staticRenderFns = [
         _vm._v(
           "\n                                                NO hay artículos agregados\n                                            "
         )
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Opciones")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Código")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Nombre")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Categoría")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Precio de venta")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Stock")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Estado")])
       ])
     ])
   }

@@ -140,7 +140,7 @@
                                         </label>
                                         <div class="form-inline">
                                             <input type="text" class="form-control" v-model="code" @keyup.enter="searchArticle()" placeholder="Ingrese artículo">
-                                            <button class="btn btn-primary">...</button>
+                                            <button class="btn btn-primary" @click="openModal()">...</button>
                                             <input type="text" class="form-control" readonly v-model="article">
                                         </div>
                                     </div>
@@ -247,7 +247,56 @@
                             </button>
                         </div>
                         <div class="modal-body">
-
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <select class="form-control col-md-3" v-model="judgmentA">
+                                            <option value="name" selected="selected">Nombre</option>
+                                            <option value="description">Descripción</option>
+                                            <option value="code">Código</option>
+                                        </select>
+                                        <input type="text" v-model="searchA" @keyup.enter="listArticle(searchA,judgmentA)" class="form-control" placeholder="Texto a buscar">
+                                        <button type="submit" @click="listArticle(searchA,judgmentA)" class="btn btn-primary"><i class="fa fa-search"></i> Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="table-response">
+                                <table class="table table-bordered table-striped table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Opciones</th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Categoría</th>
+                                            <th>Precio de venta</th>
+                                            <th>Stock</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="article in articleArray" :key="article.id"> 
+                                            <td>
+                                                <button type="button" class="btn btn-success btn-sm" @click="addDetailModal(article)"> 
+                                                    <i class="icon-check"></i>
+                                                </button>
+                                            </td>
+                                            <td v-text="article.code"></td>
+                                            <td v-text="article.name"></td>
+                                            <td v-text="article.category_name"></td>
+                                            <td v-text="article.sale_price"></td>
+                                            <td v-text="article.stock"></td>
+                                            <td>
+                                                <div v-if="article.condition">
+                                                    <span class="badge badge-success">Activo</span>
+                                                </div>
+                                                <div v-else>
+                                                    <span class="badge badge-danger">Desactivado</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" @click="closeModal()">Cerrar</button>
@@ -302,6 +351,8 @@
                 offset: 3,
                 judgment: 'voucher_number',
                 search: '',
+                judgmentA: 'name',
+                searchA: '',
                 articleArray: [],
                 code: '',
                 article: ''
@@ -470,6 +521,22 @@
                     } 
                 }
             },
+            addDetailModal(data= [])
+            {
+
+            },
+            listArticle(search, judgment) 
+            {
+                let me= this;
+                var url= '/articles/listArticle?search=' + search + '&judgment=' + judgment;
+                axios.get(url).then(function (response) {
+                    var response= response.data;
+                    me.articleArray= response.articles.data;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+            },
             registerPerson()
             {
                 if(this.validatePerson())
@@ -498,37 +565,7 @@
                 {
                     console.log(error)
                 });
-            },
-            updatePerson()
-            {
-                if(this.validatePerson())
-                {
-                    return;
-                }
-
-                let me= this;
-
-                axios.put('/users/update',
-                {
-                    'name': this.name,
-                    'document_type': this.document_type,
-                    'document_number': this.document_number,
-                    'address': this.address,
-                    'telephone': this.telephone,
-                    'email': this.email,
-                    'user': this.user,
-                    'password': this.password,
-                    'rol_id': this.rol_id,
-                    'id': this.person_id
-                }).then(function(response)
-                {
-                    me.closeModal();
-                    me.listPerson(1,'','name');
-                }).catch(function (error)
-                {
-                    console.log(error)
-                });
-            },  
+            }, 
             validatePerson()
             {
                 this.personError=0;
@@ -542,52 +579,6 @@
                 if(this.showPersonMsgError.length) this.personError=1;
                 return this.personError;
             },
-            ActivateDesactivateUser(id)
-            {
-                const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-                })
-
-        
-                    swalWithBootstrapButtons.fire({
-                    title: '¿Estás seguro de cambiar el estado de  este usuario?',
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Aceptar',
-                    cancelButtonText: 'Cancelar',
-                    reverseButtons: true
-                    }).then((result) => {
-                    if (result.value)
-                    {
-                        let me= this;
-                        axios.put('/users/update/update_condition',
-                        {
-                            'id': id
-                        }).then(function(response)
-                        {
-                            me.listPerson(1,'','name');
-                            swalWithBootstrapButtons.fire(
-                            '¡Listo!',
-                            'El estado del usuario ha sido cambiado.',
-                            'success'
-                            )
-                        }).catch(function (error)
-                        {
-                            console.log(error)
-                        });
-
-                    
-                    } else if (
-                        result.dismiss === Swal.DismissReason.cancel
-                    ) {
-                        
-                    }
-                    })
-            },
             showDetail()
             {
                 this.list=0;
@@ -599,63 +590,11 @@
             closeModal()
             {
                 this.modal=0;
-                this.modalTitle='';
-                this.name='';
-                this.document_type='DNI';
-                this.document_number='';
-                this.address='';
-                this.telephone='';
-                this.email='';
-                this.user='';
-                this.password= '';
-                this.rol_id=0;
-                this.personError=0;
             },
-            openModal(model, action, data=[])
+            openModal()
             {
-                this.selectRol(); 
-                switch(model)
-                {
-                    case "person":
-                    {
-                        switch(action)
-                        {
-                            case "register":
-                            {
-                                this.modal=1;
-                                this.modalTitle='Registrar usuario';
-                                this.name='';
-                                this.document_type='DNI';
-                                this.document_number='';
-                                this.address='';
-                                this.telephone='';
-                                this.email='';
-                                this.user='';
-                                this.password='';
-                                this.rol_id=0;
-                                this.actionType=1;
-                                break;
-                            }
-                            case "update":
-                            {
-                                this.modal=1;
-                                this.modalTitle="Actualizar usuario";
-                                this.actionType=2;
-                                this.person_id=data['id'];
-                                this.name=data['name'];
-                                this.document_type= data['document_type'];
-                                this.document_number= data['document_number'];
-                                this.address= data['address'];
-                                this.telephone= data['telephone'];
-                                this.email= data['email'];
-                                this.user= data['user'];
-                                this.password= data['password'];
-                                this.rol_id= data['rol_id'];
-                                break;
-                            }
-                        }
-                    }
-                }
+                this.modal=1;
+                this.modalTitle='Seleccione uno o varios artículos';
             }
         },
         mounted() {

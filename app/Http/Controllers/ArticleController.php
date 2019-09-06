@@ -41,6 +41,30 @@ class ArticleController extends Controller
         ];
     }
 
+    public function listArticleModal(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+
+        $search= $request->search;
+        $judgment= $request->judgment;
+
+        if($search=='')
+        {
+            $articles= Article::join('categories','articles.category_id','=','categories.id')
+            ->select('articles.id','articles.category_id','articles.code','articles.name','categories.name as category_name','articles.sale_price','articles.stock','articles.description','articles.condition')
+            ->orderBy('articles.id','desc')->paginate(10);
+        }
+        else
+        {
+            $articles= Article::join('categories','articles.category_id','=','categories.id')
+            ->select('articles.id','articles.category_id','articles.code','articles.name','categories.name as category_name','articles.sale_price','articles.stock','articles.description','articles.condition')
+            ->where('articles.'.$judgment, 'like', '%'.$search.'%')
+            ->orderBy('articles.id','desc')->paginate(10);      
+        }
+        
+        return ['articles' => $articles];
+    }
+
     public function searchArticle(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
