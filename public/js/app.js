@@ -3027,20 +3027,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -3169,6 +3155,15 @@ __webpack_require__.r(__webpack_exports__);
       var me = this;
       me.pagination.current_page = page;
       me.listIncome(page, search, judgment);
+    },
+    addDetail: function addDetail() {
+      var me = this;
+      me.detailArray.push({
+        article_id: me.article_id,
+        article: me.article,
+        quantity: me.quantity,
+        price: me.price
+      });
     },
     registerPerson: function registerPerson() {
       if (this.validatePerson()) {
@@ -42700,10 +42695,130 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(2)
+                    _c("div", { staticClass: "col-md-2" }, [
+                      _c("div", { staticClass: "form-group" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success form-control btnadd",
+                            on: {
+                              click: function($event) {
+                                return _vm.addDetail()
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "icon-plus" })]
+                        )
+                      ])
+                    ])
                   ]),
                   _vm._v(" "),
-                  _vm._m(3),
+                  _c("div", { staticClass: "form-group row border" }, [
+                    _c("div", { staticClass: "table-responsive col-md-12" }, [
+                      _c(
+                        "table",
+                        {
+                          staticClass:
+                            "table table-bordered table-striped table-sm"
+                        },
+                        [
+                          _vm._m(2),
+                          _vm._v(" "),
+                          _vm.detailArray.length
+                            ? _c(
+                                "tbody",
+                                [
+                                  _vm._l(_vm.detailArray, function(detail) {
+                                    return _c("tr", { key: detail.id }, [
+                                      _vm._m(3, true),
+                                      _vm._v(" "),
+                                      _c("td", {
+                                        domProps: {
+                                          textContent: _vm._s(detail.article)
+                                        }
+                                      }),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: detail.price,
+                                              expression: "detail.price"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: { type: "number", value: "3" },
+                                          domProps: { value: detail.price },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                detail,
+                                                "price",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _c("input", {
+                                          directives: [
+                                            {
+                                              name: "model",
+                                              rawName: "v-model",
+                                              value: detail.quantity,
+                                              expression: "detail.quantity"
+                                            }
+                                          ],
+                                          staticClass: "form-control",
+                                          attrs: { type: "number", value: "2" },
+                                          domProps: { value: detail.quantity },
+                                          on: {
+                                            input: function($event) {
+                                              if ($event.target.composing) {
+                                                return
+                                              }
+                                              _vm.$set(
+                                                detail,
+                                                "quantity",
+                                                $event.target.value
+                                              )
+                                            }
+                                          }
+                                        })
+                                      ]),
+                                      _vm._v(" "),
+                                      _c("td", [
+                                        _vm._v(
+                                          "\n                                                " +
+                                            _vm._s(
+                                              detail.price * detail.quantity
+                                            ) +
+                                            "\n                                            "
+                                        )
+                                      ])
+                                    ])
+                                  }),
+                                  _vm._v(" "),
+                                  _vm._m(4),
+                                  _vm._v(" "),
+                                  _vm._m(5),
+                                  _vm._v(" "),
+                                  _vm._m(6)
+                                ],
+                                2
+                              )
+                            : _c("tbody", [_vm._m(7)])
+                        ]
+                      )
+                    ])
+                  ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "form-group row" }, [
                     _c("div", { staticClass: "col-md-12" }, [
@@ -42888,11 +43003,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-2" }, [
-      _c("div", { staticClass: "form-group" }, [
-        _c("button", { staticClass: "btn btn-success form-control btnadd" }, [
-          _c("i", { staticClass: "icon-plus" })
-        ])
+    return _c("thead", [
+      _c("tr", [
+        _c("th", [_vm._v("Opciones")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Artículo")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Precio")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Cantidad")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Subtotal")])
       ])
     ])
   },
@@ -42900,120 +43021,56 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row border" }, [
-      _c("div", { staticClass: "table-responsive col-md-12" }, [
-        _c(
-          "table",
-          { staticClass: "table table-bordered table-striped table-sm" },
-          [
-            _c("thead", [
-              _c("tr", [
-                _c("th", [_vm._v("Opciones")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Artículo")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Precio")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Cantidad")]),
-                _vm._v(" "),
-                _c("th", [_vm._v("Subtotal")])
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody", [
-              _c("tr", [
-                _c("td", [
-                  _c("button", { staticClass: "btn btn-danger btn-sm" }, [
-                    _c("i", { staticClass: "icon-close" })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                                                Artículo n\n                                            "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "number", value: "3" }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "number", value: "2" }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                                                $6.00\n                                            "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", [
-                _c("td", [
-                  _c("button", { staticClass: "btn btn-danger btn-sm" }, [
-                    _c("i", { staticClass: "icon-close" })
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                                                Artículo n\n                                            "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "number", value: "3" }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("input", {
-                    staticClass: "form-control",
-                    attrs: { type: "number", value: "2" }
-                  })
-                ]),
-                _vm._v(" "),
-                _c("td", [
-                  _vm._v(
-                    "\n                                                $6.00\n                                            "
-                  )
-                ])
-              ]),
-              _vm._v(" "),
-              _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-                _c("td", { attrs: { colspan: "4", align: "right" } }, [
-                  _c("strong", [_vm._v("Total parcial:")])
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("$5")])
-              ]),
-              _vm._v(" "),
-              _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-                _c("td", { attrs: { colspan: "4", align: "right" } }, [
-                  _c("strong", [_vm._v("Total impuesto:")])
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("$1")])
-              ]),
-              _vm._v(" "),
-              _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
-                _c("td", { attrs: { colspan: "4", align: "right" } }, [
-                  _c("strong", [_vm._v("Total neto:")])
-                ]),
-                _vm._v(" "),
-                _c("td", [_vm._v("$6")])
-              ])
-            ])
-          ]
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-danger btn-sm" }, [
+        _c("i", { staticClass: "icon-close" })
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
+      _c("td", { attrs: { colspan: "4", align: "right" } }, [
+        _c("strong", [_vm._v("Total parcial:")])
+      ]),
+      _vm._v(" "),
+      _c("td", [_vm._v("$5")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
+      _c("td", { attrs: { colspan: "4", align: "right" } }, [
+        _c("strong", [_vm._v("Total impuesto:")])
+      ]),
+      _vm._v(" "),
+      _c("td", [_vm._v("$1")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", { staticStyle: { "background-color": "#CEECF5" } }, [
+      _c("td", { attrs: { colspan: "4", align: "right" } }, [
+        _c("strong", [_vm._v("Total neto:")])
+      ]),
+      _vm._v(" "),
+      _c("td", [_vm._v("$6")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", { attrs: { colspan: "5" } }, [
+        _vm._v(
+          "\n                                                NO hay artículos agregados\n                                            "
         )
       ])
     ])
