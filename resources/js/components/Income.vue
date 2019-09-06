@@ -184,9 +184,9 @@
                                             </tr>
                                         </thead>
                                         <tbody v-if="detailArray.length">
-                                            <tr v-for="detail in detailArray" :key="detail.id">
+                                            <tr v-for="(detail, index) in detailArray" :key="detail.id">
                                                 <td>
-                                                    <button class="btn btn-danger btn-sm">
+                                                    <button @click="eliminateDetail(index)" class="btn btn-danger btn-sm">
                                                         <i class="icon-close"></i>
                                                     </button>
                                                 </td>
@@ -421,6 +421,11 @@
                     }
                 }
                 return sw;
+            },
+            eliminateDetail(index)
+            {
+                let me= this;
+                me.detailArray.splice(index,1);
             },
             addDetail()
             {
