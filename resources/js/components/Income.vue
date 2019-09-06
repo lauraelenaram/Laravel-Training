@@ -52,7 +52,7 @@
                                                 <i class="icon-eye"></i>
                                                 </button> &nbsp;
                                                 <template v-if="income.status=='Registrado'">
-                                                    <button class="btn btn-danger btn-sm" type="button"  @click="desactivate(income.id)">
+                                                    <button class="btn btn-danger btn-sm" type="button"  @click="desactivateIncome(income.id)">
                                                         <i class="icon-trash"></i>
                                                     </button>
                                                 </template>
@@ -614,6 +614,50 @@
 
                 if(this.showIncomeMsgError.length) this.incomeError=1;
                 return this.incomeError;
+            },
+            desactivateIncome(id)
+            {
+                const swalWithBootstrapButtons = Swal.mixin({
+                customClass: {
+                    confirmButton: 'btn btn-success',
+                    cancelButton: 'btn btn-danger'
+                },
+                buttonsStyling: false
+                })
+                    swalWithBootstrapButtons.fire({
+                    title: '¿Estás seguro de anular este ingreso?',
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar',
+                    reverseButtons: true
+                    }).then((result) => {
+                    if (result.value)
+                    {
+                        let me= this;
+                        axios.put('/incomes/desactivate',
+                        {
+                            'id': id
+                        }).then(function(response)
+                        {
+                            me.listIncome(1,'','voucher_number');
+                            swalWithBootstrapButtons.fire(
+                            '¡Anulado!',
+                            'El ha sido anulado con éxito.',
+                            'success'
+                            )
+                        }).catch(function (error)
+                        {
+                            console.log(error)
+                        });
+
+                    
+                    } else if (
+                        result.dismiss === Swal.DismissReason.cancel
+                    ) {
+                        
+                    }
+                    })
             },
             showDetail()
             {

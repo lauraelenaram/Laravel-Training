@@ -3348,6 +3348,37 @@ __webpack_require__.r(__webpack_exports__);
       if (this.showIncomeMsgError.length) this.incomeError = 1;
       return this.incomeError;
     },
+    desactivateIncome: function desactivateIncome(id) {
+      var _this = this;
+
+      var swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
+      swalWithBootstrapButtons.fire({
+        title: '¿Estás seguro de anular este ingreso?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.value) {
+          var me = _this;
+          axios.put('/incomes/desactivate', {
+            'id': id
+          }).then(function (response) {
+            me.listIncome(1, '', 'voucher_number');
+            swalWithBootstrapButtons.fire('¡Anulado!', 'El ha sido anulado con éxito.', 'success');
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else if (result.dismiss === Swal.DismissReason.cancel) {}
+      });
+    },
     showDetail: function showDetail() {
       var me = this;
       me.list = 0;
@@ -42292,7 +42323,7 @@ var render = function() {
                                             attrs: { type: "button" },
                                             on: {
                                               click: function($event) {
-                                                return _vm.desactivate(
+                                                return _vm.desactivateIncome(
                                                   income.id
                                                 )
                                               }
