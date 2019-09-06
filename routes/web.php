@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::post('/articles/register','ArticleController@store');
         Route::put('/articles/update','ArticleController@update');
         Route::put('/articles/update/update_condition','ArticleController@update_condition');
+        Route::get('/articles/searchArticle','ArticleController@searchArticle');
 
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');
@@ -71,6 +72,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::post('/articles/register','ArticleController@store');
         Route::put('/articles/update','ArticleController@update');
         Route::put('/articles/update/update_condition','ArticleController@update_condition');
+        Route::get('/articles/searchArticle','ArticleController@searchArticle');
 
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');

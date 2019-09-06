@@ -41,6 +41,16 @@ class ArticleController extends Controller
         ];
     }
 
+    public function searchArticle(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+        $filter= $request->filter;
+        $articles= Article::where('code','=',$filter)
+        ->select('id','name')->orderBy('name','asc')->take(1)->get();
+
+        return ['articles'=>$articles];
+    }
+
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');

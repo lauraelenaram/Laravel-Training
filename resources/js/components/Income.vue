@@ -93,7 +93,14 @@
                                 <div class="col-md-9">
                                     <div class="form-group">
                                         <label for="">Proveedor(*)</label>
-                                        <select class="form-control"></select>
+                                        <v-select
+                                            :on-search= "selectSupplier"
+                                            label="name"
+                                            :options= "supplierArray"
+                                            placeholder="Buscar proveedores..."
+                                            v-on:change="getSupplierData"
+                                        >
+                                        </v-select>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -129,8 +136,9 @@
                                     <div class="form-group">
                                         <label for="">Artículo</label>
                                         <div class="form-inline">
-                                            <input type="text" class="form-control" v-model="article_id" placeholder="Ingrese artículo">
+                                            <input type="text" class="form-control" v-model="code" @keyup.enter="searchArticle()" placeholder="Ingrese artículo">
                                             <button class="btn btn-primary">...</button>
+                                            <input type="text" class="form-control" readonly v-model="article">
                                         </div>
                                     </div>
                                 </div>
@@ -261,6 +269,7 @@
 </template>
 
 <script>
+    import vSelect from 'vue-select';
     export default {
         data() {
             return {
@@ -277,6 +286,7 @@
                 total: 0.0,
                 incomeArray: [],
                 detailArray: [],
+                supplierArray: [],
                 list:1,
                 modal: 0,
                 modalTitle: '',
@@ -294,8 +304,15 @@
                 },
                 offset: 3,
                 judgment: 'voucher_number',
-                search: ''
+                search: '',
+                articleArray: [],
+                code: '',
+                article: ''
             }
+        },
+        components:
+        {
+            vSelect
         },
         computed: {
             isActived: function()
@@ -344,15 +361,51 @@
                     console.log(error);
                 });
             },
-            selectRol()
+            selectSupplier(search, loading)
             {
                 let me= this;
-                var url= '/roles/selectRol';
+                loading(true)
+
+                var url= '/suppliers/selectSupplier?filter='+search;
                 axios.get(url).then(function (response) {
-                    var response= response.data;
-                    me.rolArray= response.roles;
+                    var answer= response.data;
+                    q: search
+                    me.supplierArray= answer.suppliers;
+                    loading(false)
                 })
                 .catch(function (error) {
+                    console.log(error);
+                });
+            },
+            getSupplierData(opt)
+            {
+                let me= this;
+                me.loading= true;
+                me.supplier_id= opt.id;
+            },
+            searchArticle()
+            {
+                let me= this;
+                var url= '/articles/searchArticle?filter='+ me.code;
+
+                axios.get(url).then(function(response)
+                {
+                    var response= response.data;
+                    me.articleArray= response.articles;
+
+                    if(me.articleArray.length>0)
+                    {
+                        me.article= me.articleArray[0]['name'];
+                        me.article_id= me.articleArray[0]['id'];
+                    }
+                    else
+                    {
+                        me.article= 'No existe el artículo';
+                        me.article_id= 0;
+                    }
+                })
+                .catch(function(error)
+                {
                     console.log(error);
                 });
             },
