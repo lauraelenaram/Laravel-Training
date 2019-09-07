@@ -248,17 +248,17 @@
                             <div class="form-group row border">
                                 <div class="col-md-9">
                                     <div class="form-group">
-                                        <label for="">Proveedor(*)</label>
+                                        <label for="">Proveedor</label>
                                         <p v-text="supplier"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="">Impuesto(*)</label>
+                                    <label for="">Impuesto</label>
                                     <p v-text="tax"></p>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="">Tipo de comprobante(*)</label>
+                                        <label for="">Tipo de comprobante</label>
                                         <p v-text="voucher_type"></p>
                                     </div>
                                 </div>
@@ -270,7 +270,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label for="">Número de comprobante(*)</label>
+                                        <label for="">Número de comprobante</label>
                                         <p v-text="voucher_number"></p>
                                     </div>
                                 </div>
@@ -301,11 +301,11 @@
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
                                                 <td colspan="4" align="right"><strong>Total impuesto:</strong></td>
-                                                <td>$ {{taxTotal= ((total*tax) / (1+tax)).toFixed(2) }} </td>
+                                                <td>$ {{taxTotal= ((total*tax)).toFixed(2) }} </td>
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
                                                 <td colspan="4" align="right"><strong>Total neto:</strong></td>
-                                                <td> ${{total=calculateTotal}} </td>
+                                                <td> ${{total}} </td>
                                             </tr>
                                         </tbody>
                                         <tbody v-else>
@@ -766,7 +766,35 @@
             },
             showIncome(id)
             {
-                this.list=2;
+                let me=this;
+                me.list=2;
+
+                var incomeArrayT= [];
+                var url= '/incomes/getHeader?id=' + id;
+                axios.get(url).then(function (response) {
+                    var response= response.data;
+                    incomeArrayT= response.income;
+
+                    me.supplier= incomeArrayT[0]['name'];
+                    me.voucher_type= incomeArrayT[0]['voucher_type'];
+                    me.voucher_serie= incomeArrayT[0]['voucher_serie'];
+                    me.voucher_number= incomeArrayT[0]['voucher_number'];
+                    me.tax= incomeArrayT[0]['tax'];
+                    me.total= incomeArrayT[0]['total'];
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
+
+
+                var urlDetails= '/incomes/getDetails?id=' + id;
+                axios.get(urlDetails).then(function (response) {
+                    var response= response.data;
+                    me.detailArray= response.details;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                });
             },
             closeModal()
             {

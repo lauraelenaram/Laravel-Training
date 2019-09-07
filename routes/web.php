@@ -48,6 +48,8 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/incomes','IncomeController@index');
         Route::post('/incomes/register','IncomeController@store');
         Route::put('/incomes/desactivate','IncomeController@desactivate');
+        Route::get('/incomes/getHeader','IncomeController@getHeader');
+        Route::get('/incomes/getDetails','IncomeController@getDetails');
     });
 
     Route::group(['middleware' => ['Vendedor']],function()
@@ -92,6 +94,8 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/incomes','IncomeController@index');
         Route::post('/incomes/register','IncomeController@store');
         Route::put('/incomes/desactivate','IncomeController@desactivate');
+        Route::get('/incomes/getHeader','IncomeController@getHeader');
+        Route::get('/incomes/getDetails','IncomeController@getDetails');
     });
     
 });

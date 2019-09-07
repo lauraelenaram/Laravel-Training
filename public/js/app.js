@@ -3483,7 +3483,29 @@ __webpack_require__.r(__webpack_exports__);
       this.list = 1;
     },
     showIncome: function showIncome(id) {
-      this.list = 2;
+      var me = this;
+      me.list = 2;
+      var incomeArrayT = [];
+      var url = '/incomes/getHeader?id=' + id;
+      axios.get(url).then(function (response) {
+        var response = response.data;
+        incomeArrayT = response.income;
+        me.supplier = incomeArrayT[0]['name'];
+        me.voucher_type = incomeArrayT[0]['voucher_type'];
+        me.voucher_serie = incomeArrayT[0]['voucher_serie'];
+        me.voucher_number = incomeArrayT[0]['voucher_number'];
+        me.tax = incomeArrayT[0]['tax'];
+        me.total = incomeArrayT[0]['total'];
+      })["catch"](function (error) {
+        console.log(error);
+      });
+      var urlDetails = '/incomes/getDetails?id=' + id;
+      axios.get(urlDetails).then(function (response) {
+        var response = response.data;
+        me.detailArray = response.details;
+      })["catch"](function (error) {
+        console.log(error);
+      });
     },
     closeModal: function closeModal() {
       this.modal = 0;
@@ -43209,7 +43231,7 @@ var render = function() {
                     _c("div", { staticClass: "col-md-9" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Proveedor(*)")
+                          _vm._v("Proveedor")
                         ]),
                         _vm._v(" "),
                         _c("p", {
@@ -43219,9 +43241,7 @@ var render = function() {
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-3" }, [
-                      _c("label", { attrs: { for: "" } }, [
-                        _vm._v("Impuesto(*)")
-                      ]),
+                      _c("label", { attrs: { for: "" } }, [_vm._v("Impuesto")]),
                       _vm._v(" "),
                       _c("p", { domProps: { textContent: _vm._s(_vm.tax) } })
                     ]),
@@ -43229,7 +43249,7 @@ var render = function() {
                     _c("div", { staticClass: "col-md-4" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Tipo de comprobante(*)")
+                          _vm._v("Tipo de comprobante")
                         ]),
                         _vm._v(" "),
                         _c("p", {
@@ -43253,7 +43273,7 @@ var render = function() {
                     _c("div", { staticClass: "col-md-4" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Número de comprobante(*)")
+                          _vm._v("Número de comprobante")
                         ]),
                         _vm._v(" "),
                         _c("p", {
@@ -43349,8 +43369,7 @@ var render = function() {
                                           "$ " +
                                             _vm._s(
                                               (_vm.taxTotal = (
-                                                (_vm.total * _vm.tax) /
-                                                (1 + _vm.tax)
+                                                _vm.total * _vm.tax
                                               ).toFixed(2))
                                             ) +
                                             " "
@@ -43370,13 +43389,7 @@ var render = function() {
                                       _vm._m(10),
                                       _vm._v(" "),
                                       _c("td", [
-                                        _vm._v(
-                                          " $" +
-                                            _vm._s(
-                                              (_vm.total = _vm.calculateTotal)
-                                            ) +
-                                            " "
-                                        )
+                                        _vm._v(" $" + _vm._s(_vm.total) + " ")
                                       ])
                                     ]
                                   )

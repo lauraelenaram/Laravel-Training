@@ -96,4 +96,34 @@ class IncomeController extends Controller
 
         return $incomes;
     }
+
+    public function getHeader(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+
+        $id= $request->id;
+
+        $income= Income::join('people','incomes.supplier_id','=','people.id')
+        ->join('users','incomes.user_id','=','users.id')
+        ->select('incomes.id','incomes.voucher_type','incomes.voucher_serie','incomes.voucher_number',
+        'incomes.date_hour','incomes.tax','incomes.total', 'incomes.status','people.name','users.user')
+        ->where('incomes.id','=',$id)
+        ->orderBy('incomes.id','desc')->take(1)->get();
+        
+        return ['income' => $income];
+    }
+
+    public function getDetails(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+
+        $id= $request->id;
+
+        $details= Income_details::join('articles','incomes_details.article_id','=','articles.id')
+        ->select('incomes_details.quantity','incomes_details.price','articles.name as article')
+        ->where('incomes_details.income_id','=',$id)
+        ->orderBy('incomes_details.id','desc')->get();
+        
+        return ['details' => $details];
+    }
 }
