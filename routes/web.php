@@ -57,6 +57,8 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/clients','ClientController@index');
         Route::post('/clients/register','ClientController@store');
         Route::put('/clients/update','ClientController@update');
+
+        Route::get('/sales','SaleController@index');
     });
 
     Route::group(['middleware' => ['Administrador']],function()
@@ -96,6 +98,8 @@ Route::group(['middleware' => ['auth']],function()
         Route::put('/incomes/desactivate','IncomeController@desactivate');
         Route::get('/incomes/getHeader','IncomeController@getHeader');
         Route::get('/incomes/getDetails','IncomeController@getDetails');
+
+        Route::get('/sales','SaleController@index');
     });
     
 });
