@@ -26,6 +26,7 @@ Vue.component('supplier-component', require('./components/Supplier.vue').default
 Vue.component('rol-component', require('./components/Rol.vue').default);
 Vue.component('user-component', require('./components/User.vue').default);
 Vue.component('income-component', require('./components/Income.vue').default);
+Vue.component('sale-component', require('./components/Sale.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

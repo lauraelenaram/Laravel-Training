@@ -59,6 +59,10 @@ Route::group(['middleware' => ['auth']],function()
         Route::put('/clients/update','ClientController@update');
 
         Route::get('/sales','SaleController@index');
+        Route::post('/sales/register','SaleController@store');
+        Route::put('/sales/desactivate','SaleController@desactivate');
+        Route::get('/sales/getHeader','SaleController@getHeader');
+        Route::get('/sales/getDetails','SaleController@getDetails');
     });
 
     Route::group(['middleware' => ['Administrador']],function()
@@ -100,6 +104,10 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/incomes/getDetails','IncomeController@getDetails');
 
         Route::get('/sales','SaleController@index');
+        Route::post('/sales/register','SaleController@store');
+        Route::put('/sales/desactivate','SaleController@desactivate');
+        Route::get('/sales/getHeader','SaleController@getHeader');
+        Route::get('/sales/getDetails','SaleController@getDetails');
     });
     
 });
