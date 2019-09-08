@@ -4339,14 +4339,14 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    registerIncome: function registerIncome() {
-      if (this.validateIncome()) {
+    registerSale: function registerSale() {
+      if (this.validateSale()) {
         return;
       }
 
       var me = this;
-      axios.post('/incomes/register', {
-        'supplier_id': this.supplier_id,
+      axios.post('/sales/register', {
+        'client_id': this.client_id,
         'voucher_type': this.voucher_type,
         'voucher_serie': this.voucher_serie,
         'voucher_number': this.voucher_number,
@@ -4355,8 +4355,8 @@ __webpack_require__.r(__webpack_exports__);
         'data': this.detailArray
       }).then(function (response) {
         me.list = 1;
-        me.listIncome(1, '', 'voucher_number');
-        me.supplier_id = 0;
+        me.listSale(1, '', 'voucher_number');
+        me.client_id = 0;
         me.voucher_type = 'Boleta';
         me.voucher_number = '';
         me.voucher_serie = '';
@@ -4366,21 +4366,32 @@ __webpack_require__.r(__webpack_exports__);
         me.article = '';
         me.quantity = 0;
         me.price = 0;
+        me.stock = 0;
+        me.code = '';
+        me.discount = 0;
         me.detailArray = [];
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    validateIncome: function validateIncome() {
-      this.incomeError = 0;
-      this.showIncomeMsgError = [];
-      if (this.supplier_id == 0) this.showIncomeMsgError.push('Seleccione un proveedor');
-      if (this.voucher_type == 0) this.showIncomeMsgError.push('Seleccione el comprobante');
-      if (!this.voucher_number) this.showIncomeMsgError.push('Ingrese el número de comprobante');
-      if (!this.tax) this.showIncomeMsgError.push('Ingrese el impuesto de compra');
-      if (this.detailArray.length <= 0) this.showIncomeMsgError.push('Ingrese detalles');
-      if (this.showIncomeMsgError.length) this.incomeError = 1;
-      return this.incomeError;
+    validateSale: function validateSale() {
+      var me = this;
+      me.saleError = 0;
+      me.showSaleMsgError = [];
+      var art;
+      me.detailArray.map(function (x) {
+        if (x.quantity > x.stock) {
+          art = x.article + " con stock insuficiente";
+          me.showSaleMsgError.push(art);
+        }
+      });
+      if (me.client_id == 0) me.showSaleMsgError.push('Seleccione un cliente');
+      if (me.voucher_type == 0) me.showSaleMsgError.push('Seleccione el comprobante');
+      if (!me.voucher_number) me.showSaleMsgError.push('Ingrese el número de comprobante');
+      if (!me.tax) me.showSaleMsgError.push('Ingrese el impuesto de compra');
+      if (me.detailArray.length <= 0) me.showSaleMsgError.push('Ingrese detalles');
+      if (me.showSaleMsgError.length) me.saleError = 1;
+      return me.saleError;
     },
     desactivateIncome: function desactivateIncome(id) {
       var _this = this;
