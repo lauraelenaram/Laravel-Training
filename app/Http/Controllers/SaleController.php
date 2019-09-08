@@ -120,7 +120,7 @@ class SaleController extends Controller
         $id= $request->id;
 
         $details= Sale_detail::join('articles','sales_details.article_id','=','articles.id')
-        ->select('sales_details.quantity','sales_details.price','sales_price.discount','articles.name as article')
+        ->select('sales_details.quantity','sales_details.price','sales_details.discount','articles.name as article')
         ->where('sales_details.sale_id','=',$id)
         ->orderBy('sales_details.id','desc')->get();
         

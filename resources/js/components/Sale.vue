@@ -262,8 +262,8 @@
                             <div class="form-group row border">
                                 <div class="col-md-9">
                                     <div class="form-group">
-                                        <label for="">Proveedor</label>
-                                        <p v-text="supplier"></p>
+                                        <label for="">Cliente</label>
+                                        <p v-text="client"></p>
                                     </div>
                                 </div>
                                 <div class="col-md-3">
@@ -297,6 +297,7 @@
                                                 <th>Artículo</th>
                                                 <th>Precio</th>
                                                 <th>Cantidad</th>
+                                                <th>Descuentos</th>
                                                 <th>Subtotal</th>
                                             </tr>
                                         </thead>
@@ -305,8 +306,9 @@
                                                 <td v-text="detail.article"></td>
                                                 <td v-text="detail.price"></td>
                                                 <td v-text="detail.quantity"></td>
+                                                <td v-text="detail.discount"></td>
                                                 <td>
-                                                    {{detail.price*detail.quantity}}
+                                                    {{detail.price*detail.quantity-detail.discount}}
                                                 </td>
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
@@ -810,30 +812,30 @@
             {
                 this.list=1;
             },
-            showIncome(id)
+            showSale(id)
             {
                 let me=this;
                 me.list=2;
 
-                var incomeArrayT= [];
-                var url= '/incomes/getHeader?id=' + id;
+                var saleArrayT= [];
+                var url= '/sales/getHeader?id=' + id;
                 axios.get(url).then(function (response) {
                     var response= response.data;
-                    incomeArrayT= response.income;
+                    saleArrayT= response.sales;
 
-                    me.supplier= incomeArrayT[0]['name'];
-                    me.voucher_type= incomeArrayT[0]['voucher_type'];
-                    me.voucher_serie= incomeArrayT[0]['voucher_serie'];
-                    me.voucher_number= incomeArrayT[0]['voucher_number'];
-                    me.tax= incomeArrayT[0]['tax'];
-                    me.total= incomeArrayT[0]['total'];
+                    me.client= saleArrayT[0]['name'];
+                    me.voucher_type= saleArrayT[0]['voucher_type'];
+                    me.voucher_serie= saleArrayT[0]['voucher_serie'];
+                    me.voucher_number= saleArrayT[0]['voucher_number'];
+                    me.tax= saleArrayT[0]['tax'];
+                    me.total= saleArrayT[0]['total'];
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
 
 
-                var urlDetails= '/incomes/getDetails?id=' + id;
+                var urlDetails= '/sales/getDetails?id=' + id;
                 axios.get(urlDetails).then(function (response) {
                     var response= response.data;
                     me.detailArray= response.details;

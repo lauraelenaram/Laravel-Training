@@ -4111,6 +4111,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -4442,24 +4444,24 @@ __webpack_require__.r(__webpack_exports__);
     closeDetail: function closeDetail() {
       this.list = 1;
     },
-    showIncome: function showIncome(id) {
+    showSale: function showSale(id) {
       var me = this;
       me.list = 2;
-      var incomeArrayT = [];
-      var url = '/incomes/getHeader?id=' + id;
+      var saleArrayT = [];
+      var url = '/sales/getHeader?id=' + id;
       axios.get(url).then(function (response) {
         var response = response.data;
-        incomeArrayT = response.income;
-        me.supplier = incomeArrayT[0]['name'];
-        me.voucher_type = incomeArrayT[0]['voucher_type'];
-        me.voucher_serie = incomeArrayT[0]['voucher_serie'];
-        me.voucher_number = incomeArrayT[0]['voucher_number'];
-        me.tax = incomeArrayT[0]['tax'];
-        me.total = incomeArrayT[0]['total'];
+        saleArrayT = response.sales;
+        me.client = saleArrayT[0]['name'];
+        me.voucher_type = saleArrayT[0]['voucher_type'];
+        me.voucher_serie = saleArrayT[0]['voucher_serie'];
+        me.voucher_number = saleArrayT[0]['voucher_number'];
+        me.tax = saleArrayT[0]['tax'];
+        me.total = saleArrayT[0]['total'];
       })["catch"](function (error) {
         console.log(error);
       });
-      var urlDetails = '/incomes/getDetails?id=' + id;
+      var urlDetails = '/sales/getDetails?id=' + id;
       axios.get(urlDetails).then(function (response) {
         var response = response.data;
         me.detailArray = response.details;
@@ -46124,11 +46126,11 @@ var render = function() {
                     _c("div", { staticClass: "col-md-9" }, [
                       _c("div", { staticClass: "form-group" }, [
                         _c("label", { attrs: { for: "" } }, [
-                          _vm._v("Proveedor")
+                          _vm._v("Cliente")
                         ]),
                         _vm._v(" "),
                         _c("p", {
-                          domProps: { textContent: _vm._s(_vm.supplier) }
+                          domProps: { textContent: _vm._s(_vm.client) }
                         })
                       ])
                     ]),
@@ -46211,11 +46213,18 @@ var render = function() {
                                         }
                                       }),
                                       _vm._v(" "),
+                                      _c("td", {
+                                        domProps: {
+                                          textContent: _vm._s(detail.discount)
+                                        }
+                                      }),
+                                      _vm._v(" "),
                                       _c("td", [
                                         _vm._v(
                                           "\n                                                " +
                                             _vm._s(
-                                              detail.price * detail.quantity
+                                              detail.price * detail.quantity -
+                                                detail.discount
                                             ) +
                                             "\n                                            "
                                         )
@@ -46712,6 +46721,8 @@ var staticRenderFns = [
         _c("th", [_vm._v("Precio")]),
         _vm._v(" "),
         _c("th", [_vm._v("Cantidad")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Descuentos")]),
         _vm._v(" "),
         _c("th", [_vm._v("Subtotal")])
       ])
