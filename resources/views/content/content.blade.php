@@ -4,7 +4,7 @@
         @if(Auth::check())
             @if(Auth::user()->rol_id==1)
                 <template v-if="menu==0">
-                    <h1>Escritorio</h1>
+                    <dashboard-component></dashboard-component>
                 </template>  
 
                 <template v-if="menu==1">
@@ -56,6 +56,10 @@
                 </template>
 
             @elseif(Auth::user()->rol_id==2)
+            <template v-if="menu==0">
+                <dashboard-component></dashboard-component>
+            </template>
+
             <template v-if="menu==5">
                 <sale-component></sale-component>
             </template>
@@ -77,6 +81,10 @@
             </template>
 
             @elseif(Auth::user()->rol_id==3)
+            <template v-if="menu==0">
+                <dashboard-component></dashboard-component>
+            </template>
+
             <template v-if="menu==1">
                 <category-component></category-component>
             </template>
