@@ -461,6 +461,7 @@
                 price:0,
                 quantity:0, 
                 discount: 0,
+                stock:0
             }
         },
         components:
@@ -548,7 +549,7 @@
             searchArticle()
             {
                 let me= this;
-                var url= '/articles/searchArticle?filter='+ me.code;
+                var url= '/articles/searchArticleSale?filter='+ me.code;
 
                 axios.get(url).then(function(response)
                 {
@@ -559,6 +560,8 @@
                     {
                         me.article= me.articleArray[0]['name'];
                         me.article_id= me.articleArray[0]['id'];
+                        me.price= me.articleArray[0]['sale_price'];
+                        me.stock= me.articleArray[0]['stock'];
                     }
                     else
                     {
@@ -650,7 +653,7 @@
             listArticle(search, judgment) 
             {
                 let me= this;
-                var url= '/articles/listArticle?search=' + search + '&judgment=' + judgment;
+                var url= '/articles/listArticleSale?search=' + search + '&judgment=' + judgment;
                 axios.get(url).then(function (response) {
                     var response= response.data;
                     me.articleArray= response.articles.data;

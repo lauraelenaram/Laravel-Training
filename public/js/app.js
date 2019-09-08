@@ -4150,7 +4150,8 @@ __webpack_require__.r(__webpack_exports__);
       article: '',
       price: 0,
       quantity: 0,
-      discount: 0
+      discount: 0,
+      stock: 0
     };
   },
   components: {
@@ -4230,7 +4231,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     searchArticle: function searchArticle() {
       var me = this;
-      var url = '/articles/searchArticle?filter=' + me.code;
+      var url = '/articles/searchArticleSale?filter=' + me.code;
       axios.get(url).then(function (response) {
         var response = response.data;
         me.articleArray = response.articles;
@@ -4238,6 +4239,8 @@ __webpack_require__.r(__webpack_exports__);
         if (me.articleArray.length > 0) {
           me.article = me.articleArray[0]['name'];
           me.article_id = me.articleArray[0]['id'];
+          me.price = me.articleArray[0]['sale_price'];
+          me.stock = me.articleArray[0]['stock'];
         } else {
           me.article = 'No existe el artículo';
           me.article_id = 0;
@@ -4312,7 +4315,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     listArticle: function listArticle(search, judgment) {
       var me = this;
-      var url = '/articles/listArticle?search=' + search + '&judgment=' + judgment;
+      var url = '/articles/listArticleSale?search=' + search + '&judgment=' + judgment;
       axios.get(url).then(function (response) {
         var response = response.data;
         me.articleArray = response.articles.data;

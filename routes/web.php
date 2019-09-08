@@ -64,6 +64,9 @@ Route::group(['middleware' => ['auth']],function()
         Route::put('/sales/desactivate','SaleController@desactivate');
         Route::get('/sales/getHeader','SaleController@getHeader');
         Route::get('/sales/getDetails','SaleController@getDetails');
+
+        Route::get('/articles/searchArticleSale','ArticleController@searchArticleSale');
+        Route::get('/articles/listArticleSale','ArticleController@listArticleSale');
     });
 
     Route::group(['middleware' => ['Administrador']],function()
@@ -85,6 +88,8 @@ Route::group(['middleware' => ['auth']],function()
         Route::put('/articles/update/update_condition','ArticleController@update_condition');
         Route::get('/articles/searchArticle','ArticleController@searchArticle');
         Route::get('/articles/listArticle','ArticleController@listArticleModal');
+        Route::get('/articles/listArticleSale','ArticleController@listArticleSale');
+        Route::get('/articles/searchArticleSale','ArticleController@searchArticleSale');
 
         Route::get('/suppliers','SupplierController@index');
         Route::post('/suppliers/register','SupplierController@store');

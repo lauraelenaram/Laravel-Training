@@ -65,12 +65,50 @@ class ArticleController extends Controller
         return ['articles' => $articles];
     }
 
+    public function listArticleSale(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+
+        $search= $request->search;
+        $judgment= $request->judgment;
+
+        if($search=='')
+        {
+            $articles= Article::join('categories','articles.category_id','=','categories.id')
+            ->select('articles.id','articles.category_id','articles.code','articles.name','categories.name as category_name','articles.sale_price','articles.stock','articles.description','articles.condition')
+            ->where('articles.stock','>','0')
+            ->orderBy('articles.id','desc')->paginate(10);
+        }
+        else
+        {
+            $articles= Article::join('categories','articles.category_id','=','categories.id')
+            ->select('articles.id','articles.category_id','articles.code','articles.name','categories.name as category_name','articles.sale_price','articles.stock','articles.description','articles.condition')
+            ->where('articles.stock','>','0')
+            ->where('articles.'.$judgment, 'like', '%'.$search.'%')
+            ->orderBy('articles.id','desc')->paginate(10);      
+        }
+        
+        return ['articles' => $articles];
+    }
+
     public function searchArticle(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
         $filter= $request->filter;
         $articles= Article::where('code','=',$filter)
         ->select('id','name')->orderBy('name','asc')->take(1)->get();
+
+        return ['articles'=>$articles];
+    }
+
+    public function searchArticleSale(Request $request)
+    {
+        if(!$request->ajax()) return redirect('/');
+        $filter= $request->filter;
+        $articles= Article::where('code','=',$filter)
+        ->select('id','name','stock','sale_price')
+        ->where('stock','>','0')
+        ->orderBy('name','asc')->take(1)->get();
 
         return ['articles'=>$articles];
     }
