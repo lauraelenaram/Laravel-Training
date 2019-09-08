@@ -4395,7 +4395,7 @@ __webpack_require__.r(__webpack_exports__);
       if (me.showSaleMsgError.length) me.saleError = 1;
       return me.saleError;
     },
-    desactivateIncome: function desactivateIncome(id) {
+    desactivateSale: function desactivateSale(id) {
       var _this = this;
 
       var swalWithBootstrapButtons = Swal.mixin({
@@ -4406,7 +4406,7 @@ __webpack_require__.r(__webpack_exports__);
         buttonsStyling: false
       });
       swalWithBootstrapButtons.fire({
-        title: '¿Estás seguro de anular este ingreso?',
+        title: '¿Estás seguro de anular esta venta?',
         type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Aceptar',
@@ -4415,11 +4415,11 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (result) {
         if (result.value) {
           var me = _this;
-          axios.put('/incomes/desactivate', {
+          axios.put('/sales/desactivate', {
             'id': id
           }).then(function (response) {
-            me.listIncome(1, '', 'voucher_number');
-            swalWithBootstrapButtons.fire('¡Anulado!', 'El ha sido anulado con éxito.', 'success');
+            me.listSale(1, '', 'voucher_number');
+            swalWithBootstrapButtons.fire('¡Anulada!', 'La venta ha sido anulada con éxito.', 'success');
           })["catch"](function (error) {
             console.log(error);
           });

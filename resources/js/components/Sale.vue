@@ -748,7 +748,7 @@
                 if(me.showSaleMsgError.length) me.saleError=1;
                 return me.saleError;
             },
-            desactivateIncome(id)
+            desactivateSale(id)
             {
                 const swalWithBootstrapButtons = Swal.mixin({
                 customClass: {
@@ -758,7 +758,7 @@
                 buttonsStyling: false
                 })
                     swalWithBootstrapButtons.fire({
-                    title: '¿Estás seguro de anular este ingreso?',
+                    title: '¿Estás seguro de anular esta venta?',
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Aceptar',
@@ -768,15 +768,15 @@
                     if (result.value)
                     {
                         let me= this;
-                        axios.put('/incomes/desactivate',
+                        axios.put('/sales/desactivate',
                         {
                             'id': id
                         }).then(function(response)
                         {
-                            me.listIncome(1,'','voucher_number');
+                            me.listSale(1,'','voucher_number');
                             swalWithBootstrapButtons.fire(
-                            '¡Anulado!',
-                            'El ha sido anulado con éxito.',
+                            '¡Anulada!',
+                            'La venta ha sido anulada con éxito.',
                             'success'
                             )
                         }).catch(function (error)
