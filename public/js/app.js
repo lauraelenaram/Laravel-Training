@@ -4417,7 +4417,26 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['notifications'],
   data: function data() {
-    return {};
+    return {
+      notificationsArray: []
+    };
+  },
+  computed: {
+    list: function list() {
+      this.notificationsArray = Object.values(this.notifications[0]);
+
+      if (this.notifications == '') {
+        return this.notificationsArray = [];
+      } else {
+        this.notificationsArray = Object.values(this.notifications[0]);
+
+        if (this.notificationsArray.length > 3) {
+          return Object.values(this.notificationsArray[4]);
+        } else {
+          return Object.values(this.notificationsArray[0]);
+        }
+      }
+    }
   }
 });
 
@@ -57407,7 +57426,7 @@ var render = function() {
       _vm.notifications.length
         ? _c(
             "div",
-            _vm._l(_vm.notifications, function(item) {
+            _vm._l(_vm.list, function(item) {
               return _c("li", { key: item.id }, [
                 _c(
                   "a",
@@ -57415,12 +57434,10 @@ var render = function() {
                   [
                     _c("i", { staticClass: "fa fa-envelope-o" }),
                     _vm._v(
-                      " " +
-                        _vm._s(item.data.data.incomes.msg) +
-                        "\n                    "
+                      " " + _vm._s(item.incomes.msg) + "\n                    "
                     ),
                     _c("span", { staticClass: "badge badge-success" }, [
-                      _vm._v(_vm._s(item.data.data.incomes.number))
+                      _vm._v(_vm._s(item.incomes.number))
                     ])
                   ]
                 ),
@@ -57431,12 +57448,10 @@ var render = function() {
                   [
                     _c("i", { staticClass: "fa fa-tasks" }),
                     _vm._v(
-                      " " +
-                        _vm._s(item.data.data.sales.msg) +
-                        "\n                    "
+                      " " + _vm._s(item.sales.msg) + "\n                    "
                     ),
                     _c("span", { staticClass: "badge badge-danger" }, [
-                      _vm._v(_vm._s(item.data.data.sales.number))
+                      _vm._v(_vm._s(item.sales.number))
                     ])
                   ]
                 )
@@ -73352,15 +73367,17 @@ module.exports = function(module) {
 /*!*****************************!*\
   !*** ./resources/js/app.js ***!
   \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _bootstrap__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
  * building robust, powerful web applications using Vue and Laravel.
  */
-__webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");

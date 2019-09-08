@@ -9,14 +9,14 @@
                 <strong>Notificaciones</strong>
             </div>
             <div v-if="notifications.length">
-                <li v-for="item in notifications" :key="item.id">
+                <li v-for="item in list" :key="item.id">
                     <a class="dropdown-item" href="#">
-                        <i class="fa fa-envelope-o"></i> {{item.data.data.incomes.msg}}
-                        <span class="badge badge-success">{{item.data.data.incomes.number}}</span>
+                        <i class="fa fa-envelope-o"></i> {{item.incomes.msg}}
+                        <span class="badge badge-success">{{item.incomes.number}}</span>
                     </a>
                     <a class="dropdown-item" href="#">
-                        <i class="fa fa-tasks"></i> {{item.data.data.sales.msg}}
-                        <span class="badge badge-danger">{{item.data.data.sales.number}}</span>
+                        <i class="fa fa-tasks"></i> {{item.sales.msg}}
+                        <span class="badge badge-danger">{{item.sales.number}}</span>
                     </a>
                 </li>
             </div>
@@ -32,7 +32,30 @@ export default {
     data()
     {
         return {
-
+            notificationsArray: []
+        }
+    },
+    computed:
+    {
+        list: function()
+        {
+            this.notificationsArray= Object.values(this.notifications[0]);
+            if(this.notifications == '')
+            {
+                return this.notificationsArray= [];
+            }
+            else
+            {
+                this.notificationsArray= Object.values(this.notifications[0]);
+                if(this.notificationsArray.length > 3)
+                {
+                    return Object.values(this.notificationsArray[4]);
+                }
+                else
+                {
+                    return Object.values(this.notificationsArray[0]);
+                }
+            }
         }
     }
 }
