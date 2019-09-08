@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Income;
 use App\Income_details;
+use App\User;
+use App\Notifications\NotifyAdmin;
 
 class IncomeController extends Controller
 {
@@ -76,6 +78,27 @@ class IncomeController extends Controller
                 $details->quantity= $det['quantity'];
                 $details->price= $det['price'];
                 $details->save();
+            }
+
+            $actualDate= date('Y-m-d');
+            $numSales= DB::table('sales')->whereDate('created_at',$actualDate)->count();
+            $numIncomes= DB::table('incomes')->whereDate('created_at',$actualDate)->count();
+
+            $dataArray= [
+                'sales' => [
+                    'number' => $numSales,
+                    'msg' => 'Sales'
+                ],
+                'incomes' => [
+                    'number' => $numIncomes,
+                    'msg' => 'Incomes'
+                ]
+            ];
+            $allUsers= User::all();
+
+            foreach ($allUsers as $notify)
+            {
+                User::findOrFail($notify->id)->notify(new NotifyAdmin($dataArray));
             }
 
             DB::commit();  
