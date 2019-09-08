@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/clients','ClientController@index');
         Route::post('/clients/register','ClientController@store');
         Route::put('/clients/update','ClientController@update');
+        Route::get('/clients/selectClient','ClientController@selectClient');
 
         Route::get('/sales','SaleController@index');
         Route::post('/sales/register','SaleController@store');
@@ -70,6 +71,7 @@ Route::group(['middleware' => ['auth']],function()
         Route::get('/clients','ClientController@index');
         Route::post('/clients/register','ClientController@store');
         Route::put('/clients/update','ClientController@update');
+        Route::get('/clients/selectClient','ClientController@selectClient');
 
         Route::get('/categories','CategoryController@index');
         Route::post('/categories/register','CategoryController@store');

@@ -4208,25 +4208,25 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    selectSupplier: function selectSupplier(search, loading) {
+    selectClient: function selectClient(search, loading) {
       var me = this;
       loading(true);
-      var url = '/suppliers/selectSupplier?filter=' + search;
+      var url = '/clients/selectClient?filter=' + search;
       axios.get(url).then(function (response) {
         var answer = response.data;
 
         q: search;
 
-        me.supplierArray = answer.suppliers;
+        me.clientArray = answer.clients;
         loading(false);
       })["catch"](function (error) {
         console.log(error);
       });
     },
-    getSupplierData: function getSupplierData(val1) {
+    getClientData: function getClientData(val1) {
       var me = this;
       me.loading = true;
-      me.supplier_id = val1.id;
+      me.client_id = val1.id;
     },
     searchArticle: function searchArticle() {
       var me = this;

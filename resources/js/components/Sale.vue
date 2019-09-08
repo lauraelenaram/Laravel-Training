@@ -523,27 +523,27 @@
                     console.log(error);
                 });
             },
-            selectSupplier(search, loading)
+            selectClient(search, loading)
             {
                 let me= this;
                 loading(true)
 
-                var url= '/suppliers/selectSupplier?filter='+search;
+                var url= '/clients/selectClient?filter='+search;
                 axios.get(url).then(function (response) {
                     var answer= response.data;
                     q: search
-                    me.supplierArray= answer.suppliers;
+                    me.clientArray= answer.clients;
                     loading(false)
                 })
                 .catch(function (error) {
                     console.log(error);
                 });
             },
-            getSupplierData(val1)
+            getClientData(val1)
             {
                 let me= this;
                 me.loading= true;
-                me.supplier_id= val1.id;
+                me.client_id= val1.id;
             },
             searchArticle()
             {
