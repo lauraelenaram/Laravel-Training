@@ -49,7 +49,10 @@
                                         <tr v-for="sale in saleArray" :key="sale.id"> 
                                             <td>
                                                 <button type="button" class="btn btn-success btn-sm" @click="showSale(sale.id)"> 
-                                                <i class="icon-eye"></i>
+                                                    <i class="icon-eye"></i>
+                                                </button> &nbsp;
+                                                <button type="button" class="btn btn-info btn-sm" @click="pdfSale(sale.id)"> 
+                                                    <i class="icon-doc"></i>
                                                 </button> &nbsp;
                                                 <template v-if="sale.status=='Registrado'">
                                                     <button class="btn btn-danger btn-sm" type="button"  @click="desactivateSale(sale.id)">
@@ -595,6 +598,10 @@
                     }
                 }
                 return sw;
+            },
+            pdfSale(id)
+            {
+                window.open('http://127.0.0.1:8000/sales/pdf/' + id + ',' + '_blank');
             },
             eliminateDetail(index)
             {

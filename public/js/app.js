@@ -4119,6 +4119,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -4274,6 +4277,9 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return sw;
+    },
+    pdfSale: function pdfSale(id) {
+      window.open('http://127.0.0.1:8000/sales/pdf/' + id + ',' + '_blank');
     },
     eliminateDetail: function eliminateDetail(index) {
       var me = this;
@@ -45228,6 +45234,22 @@ var render = function() {
                                       }
                                     },
                                     [_c("i", { staticClass: "icon-eye" })]
+                                  ),
+                                  _vm._v(
+                                    "  \n                                            "
+                                  ),
+                                  _c(
+                                    "button",
+                                    {
+                                      staticClass: "btn btn-info btn-sm",
+                                      attrs: { type: "button" },
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.pdfSale(sale.id)
+                                        }
+                                      }
+                                    },
+                                    [_c("i", { staticClass: "icon-doc" })]
                                   ),
                                   _vm._v(
                                     "  \n                                            "

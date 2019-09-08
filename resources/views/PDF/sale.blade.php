@@ -112,6 +112,7 @@
         }
     </style>
     <body>
+        @foreach ($sale as $s)
         <header>
             <div id="logo">
                 <img src="img/logo2.png" alt="incanatoIT" id="imagen">
@@ -122,8 +123,8 @@
                 </p>
             </div>
             <div id="fact">
-                <p>Factura<br>
-                0001-0004</p>
+                <p>{{$s->voucher_type}}<br>
+                {{$s->voucher_serie}}-{{$s->voucher_number}}</p>
             </div>
         </header>
         <br>
@@ -137,11 +138,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <th><p id="cliente">Sr(a). Juan Carlos Arcila Díaz<br>
-                            Documento: 47715777<br>
-                            Dirección: Zarumilla 113 - Chiclayo<br>
-                            Teléfono: 931742904<br>
-                            Email: jcarlos.ad7@gmail.com</p></th>
+                            <th><p id="cliente">Sr(a). {{$s->name}}<br>
+                            {{$s->voucher_type}}: {{$s->voucher_number}}<br>
+                            Dirección: {{$s->address}}<br>
+                            Teléfono: {{$s->telephone}}<br>
+                            Email: {{$s->email}}</p></th>
                         </tr>
                     </tbody>
                 </table>
@@ -159,13 +160,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>vendedor</td>
-                            <td>fecha</td>
+                            <td>{{$s->user}}</td>
+                            <td>{{$s->created_at}}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </section>
+        @endforeach
         <br>
         <section>
             <div>
@@ -180,36 +182,40 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @foreach ($details as $d)
                         <tr>
-                            <td>cant</td>
-                            <td>descripcion del producto descripcion del producto descripcion del producto</td>
-                            <td>precio uni</td>
-                            <td>descuento</td>
-                            <td>precio total</td>
+                            <td>{{$d->quantity}}</td>
+                            <td>{{$d->article}}</td>
+                            <td>{{$d->price}}</td>
+                            <td>{{$d->discount}}</td>
+                            <td>{{$d->quantity * $d->price - $d->discount}}</td>
                         </tr>
+                    @endforeach
                     </tbody>
                     <tfoot>
+                    @foreach ($sale as $s)
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th>SUBTOTAL</th>
-                            <td>subtotal</td>
+                            <td>${{round($s->total - ($s->total * $s->tax),2)}}</td>
                         </tr>
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>IVA</th>
-                            <td>iva</td>
+                            <th>IMPUESTO</th>
+                            <td>${{round($s->total * $s->tax,2)}}</td>
                         </tr>
                         <tr>
                             <th></th>
                             <th></th>
                             <th></th>
                             <th>TOTAL</th>
-                            <td>total</td>
+                            <td>${{$s->total}}</td>
                         </tr>
+                    @endforeach
                     </tfoot>
                 </table>
             </div>
