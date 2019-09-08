@@ -19,6 +19,14 @@ class DashboardController extends Controller
         ->groupBy(DB::raw('MONTH(i.date_hour)'),DB::raw('YEAR(i.date_hour)'))
         ->get();
 
-        return ['incomes' => $incomes, 'year' => $year];
+        $sales= DB::table('sales as s')
+        ->select(DB::raw('MONTH(s.date_hour) as month'),
+        DB::raw('YEAR(s.date_hour) as year'),
+        DB::raw('SUM(s.total) as total'))
+        ->whereYear('s.date_hour',$year)
+        ->groupBy(DB::raw('MONTH(s.date_hour)'),DB::raw('YEAR(s.date_hour)'))
+        ->get();
+
+        return ['incomes' => $incomes,'sales' => $sales, 'year' => $year];
     }
 }

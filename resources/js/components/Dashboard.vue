@@ -57,7 +57,12 @@ export default {
             charIncome:null,
             incomes: [],
             varTotalIncome: [],
-            varMonthIncome: []
+            varMonthIncome: [],
+            varSale:null,
+            charSale:null,
+            sales: [],
+            varTotalSale: [],
+            varMonthSale: []
         }
     },
     methods:
@@ -70,6 +75,19 @@ export default {
                 var response= response.data;
                 me.incomes= response.incomes;
                 me.loadIncomes();
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+        },
+        getSales()
+        {
+            let me= this;
+            var url= '/dashboard';
+            axios.get(url).then(function (response) {
+                var response= response.data;
+                me.sales= response.sales;
+                me.loadSales();
             })
             .catch(function (error) {
                 console.log(error);
@@ -107,11 +125,45 @@ export default {
                     }
                 }
             });
+        },
+        loadSales()
+        {
+            let me= this;
+            me.sales.map(function(x)
+            {
+                me.varMonthSale.push(x.month);
+                me.varTotalSale.push(x.total);
+            });
+            me.varSale= document.getElementById('sales').getContext('2d');
+
+            me.charSale = new Chart(me.varSale, {
+                type: 'bar',
+                data: {
+                    labels: me.varMonthSale,
+                    datasets: [{
+                        label: 'Ventas',
+                        data: me.varTotalSale,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 0.2)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
         }
     },
     mounted()
     {
         this.getIncomes();
+        this.getSales();
     }
 }
 </script>
