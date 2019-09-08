@@ -97,6 +97,29 @@ class SaleController extends Controller
         return $sales;
     }
 
+    public function pdf(Request $request,$id)
+    {
+        $sale= Sale::join('people','sales.client_id','=','people.id')
+        ->join('users','sales.user_id','=','users.id')
+        ->select('sales.id','sales.voucher_type','sales.voucher_serie','sales.voucher_number',
+        'sales.created_at','sales.tax','sales.total','sales.status','people.name',
+        'people.document_type','people.document_number','people.address','people.email',
+        'people.telephone','users.user')
+        ->where('sales.id','=',$id)
+        ->orderBy('sales.id','desc')->take(1)->get();  
+        
+        $details= Sale_detail::join('articles','sales_details.article_id','=','articles.id')
+        ->select('sales_details.quantity','sales_details.price','sales_details.discount',
+        'articles.name as article')
+        ->where('sales_details.sale_id','=',$id)
+        ->orderBy('sales_details.id','desc')->get();  
+
+        $sale_number= Sale::select('voucher_number')->where('id',$id)->get();
+        $pdf= \PDF::loadView('PDF.sale',['sale' => $sale, 'details' => $details]);
+
+        return $pdf->download('Venta-'.$sale_number[0]->voucher_number.'.pdf');
+    }
+
     public function getHeader(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
