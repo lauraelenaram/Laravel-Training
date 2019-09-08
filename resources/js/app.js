@@ -28,6 +28,7 @@ Vue.component('user-component', require('./components/User.vue').default);
 Vue.component('income-component', require('./components/Income.vue').default);
 Vue.component('sale-component', require('./components/Sale.vue').default);
 Vue.component('dashboard-component', require('./components/Dashboard.vue').default);
+Vue.component('consultincome-component', require('./components/ConsultIncome.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
