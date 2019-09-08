@@ -213,13 +213,15 @@
                                                     <input type="number" class="form-control" v-model="detail.price">
                                                 </td>
                                                 <td>
+                                                    <span style="color:red;" v-show="detail.quantity>detail.stock">Stock disponible: {{detail.stock}}</span>
                                                     <input type="number" class="form-control" v-model="detail.quantity">
                                                 </td>
                                                 <td>
+                                                    <span style="color:red;" v-show="detail.discount>(detail.price * detail.quantity)">Descuento superior</span>
                                                     <input type="number" class="form-control" v-model="detail.discount">
                                                 </td>
                                                 <td>
-                                                    {{detail.price*detail.quantity}}
+                                                    {{detail.price*detail.quantity-detail.discount}}
                                                 </td>
                                             </tr>
                                             <tr style="background-color: #CEECF5;">
@@ -505,7 +507,7 @@
                 var result=0;
                 for(var i=0; i<this.detailArray.length; i++)
                 {
-                    result= result + (this.detailArray[i].price * this.detailArray[i].quantity)
+                    result= result + (this.detailArray[i].price * this.detailArray[i].quantity-this.detailArray[i].discount)
                 }
                 return result;
             }
@@ -615,17 +617,32 @@
                     }
                     else
                     {
-                        me.detailArray.push({
+                        if(me.quantity>me.stock)
+                        {
+                            Swal.fire({
+                            type: 'error',
+                            title: 'Error...',
+                            text: 'NO hay stock disponible.',
+                            })
+                        }
+                        else
+                        {
+                            me.detailArray.push({
                             article_id: me.article_id,
                             article: me.article,
                             quantity: me.quantity,
-                            price: me.price
-                        });
-                        me.code='';
-                        me.article_id=0;
-                        me.article='';
-                        me.quantity=0;
-                        me.price=0;
+                            price: me.price,
+                            discount: me.discount,
+                            stock: me.stock
+                            });
+                            me.code='';
+                            me.article_id=0;
+                            me.article='';
+                            me.quantity=0;
+                            me.price=0;
+                            me.discount=0;
+                            me.stock=0;
+                        }
                     } 
                 }
             },
@@ -646,7 +663,9 @@
                             article_id: data['id'],
                             article: data['name'],
                             quantity: 1,
-                            price: 1
+                            price: data['sale_price'],
+                            discount: 0,
+                            stock: data['stock'],
                         });
                     } 
             },
