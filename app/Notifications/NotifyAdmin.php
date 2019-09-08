@@ -30,13 +30,21 @@ class NotifyAdmin extends Notification
      */
     public function via($notifiable)
     {
-        return ['database'];
+        return ['database','broadcast'];
     }
 
     public function toDatabase($notifiable)
     {
         return [
             'data' => $this->GlobalData
+        ];
+    }
+    public function toBroadcast($notifiable)
+    {
+        return [
+            'data' => [
+                'data' => $this->GlobalData
+            ]
         ];
     }
 

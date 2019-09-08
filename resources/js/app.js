@@ -6,6 +6,7 @@
 
 require('./bootstrap');
 
+window.$= window.jQuery= require('jquery');
 window.Vue = require('vue');
 
 /**
@@ -54,6 +55,12 @@ const app = new Vue({
         }).catch(function(error)
         {
             console.log(error);
+        });
+
+        var userId= $('meta[name="userId"]').attr('content');
+
+        Echo.private('App.User.' + userId).notification((notification) => {
+            me.notifications.unshift(notification);
         });
     }
 });
