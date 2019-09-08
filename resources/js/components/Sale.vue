@@ -726,6 +726,7 @@
                     me.code='';
                     me.discount=0;
                     me.detailArray= [];
+                    window.open('http://127.0.0.1:8000/sales/pdf/' + response.data.id + ',' + '_blank');
                 }).catch(function (error)
                 {
                     console.log(error)

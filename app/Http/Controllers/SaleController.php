@@ -79,6 +79,7 @@ class SaleController extends Controller
             }
 
             DB::commit();  
+            return ['id' => $sales->id];
         }
         catch (Exception $e)
         {
