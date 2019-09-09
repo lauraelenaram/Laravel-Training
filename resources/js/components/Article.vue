@@ -12,6 +12,9 @@
                         <button type="button" @click="openModal('article','register')" class="btn btn-secondary">
                             <i class="icon-plus"></i>&nbsp;Nuevo
                         </button>
+                        <button type="button" @click="loadPDF()" class="btn btn-info">
+                            <i class="icon-doc"></i>&nbsp;Reporte
+                        </button>
                     </div>
                     <div class="card-body">
                         <div class="form-group row">
@@ -249,6 +252,10 @@
                 .catch(function (error) {
                     console.log(error);
                 });
+            },
+            loadPDF()
+            {
+                window.open('http://127.0.0.1:8000/articles/listPDF','_blank');
             },
             selectCategory()
             {
